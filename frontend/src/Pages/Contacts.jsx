@@ -3,6 +3,8 @@ import plus from "../Images/plus.svg";
 import { useState } from "react";
 import AddContatctModal from "../Components/AddContatctModal";
 import ContactComponent from "../Components/ContactComponent";
+import { useEffect } from "react";
+import axios from "axios";
 
 const DUMMY_DATA = [
   {
@@ -101,11 +103,24 @@ const Contacts = () => {
     font-size: 25px;
   `;
 
+  const [user, setUser] = useState({name: '', email: ''})
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    
+    axios.get("http://127.0.0.1:3333/user", {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(response =>{
+      
+      setUser({name: response.data[0].name, email: response.data[0].email})
+    }).catch(err => {
+      console.log('error', err.message);
+    });
+  }, []);
   return (
     <>
       <HomeComponent>
         <ContactMensage>
-          Olá nome, seja bem vindo, abaixo estão todos os seus contatos
+          Olá {user.name}, seja bem vindo, abaixo estão todos os seus contatos
           cadastrados
         </ContactMensage>
         <ButtonWrapper onClick={handleOpenAddContactModal}>

@@ -5,6 +5,7 @@ import useForm from "../Hooks/useForm";
 import Input from "../Components/Input";
 import axios from 'axios';
 import { toast } from "react-toastify";
+import {UseLogged} from '../Context/UserLogged';
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -101,6 +102,7 @@ export const ErrorMessage = styled.span`
 `;
 
 const Home = () => {
+  const {isLoggedIn, setIsLoggedIn} = UseLogged();
   const history = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const {
@@ -129,8 +131,10 @@ const Home = () => {
         email: enteredEmail,
         password: enteredPassword
       }).then(response => {
-        console.log('response', response.data);
-        toast.success('Usuário logado', {
+        
+        localStorage.setItem("token",response.data.token);
+        setIsLoggedIn(true);
+        toast.success('Você está logado', {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
