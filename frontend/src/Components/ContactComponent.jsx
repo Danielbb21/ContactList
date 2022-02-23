@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 import trash from "../Images/trash.svg";
 import pencil from "../Images/pencil.svg";
+import { useState } from "react";
+import DeleteContactModal from "./DeleteContactModal";
 
 const ContactWrapper = styled.div`
   width: 200px;
@@ -36,7 +38,6 @@ const Image = styled.img`
 
 const ButtonsWrapper = styled.div`
   width: 95%;
-  
   margin-top: 10px;
   margin-right: 50px;
   display: flex;
@@ -44,6 +45,17 @@ const ButtonsWrapper = styled.div`
 `;
 
 const ContactComponent = (props) => {
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const onOpenDeleteModal = () => {
+    setOpenDeleteModal(true);
+  }
+
+  const onCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  }
+
   return (
     <>
       <ContactWrapper key={props.id}>
@@ -66,8 +78,9 @@ const ContactComponent = (props) => {
               width: "20px",
               marginLeft: "10px",
             }}
+            onClick = {onOpenDeleteModal}
           >
-            <img src={trash} style={{ color: "white" }} />
+            <img src={trash} style={{ color: "white" }} alt="deletar contato"/>
           </Button>
           <Button
             type="submit"
@@ -79,10 +92,11 @@ const ContactComponent = (props) => {
               marginLeft: "10px",
             }}
           >
-            <img src={pencil} style={{ color: "white" }} />
+            <img src={pencil} style={{ color: "white" }} alt="atualizar contato"/>
           </Button>
         </ButtonsWrapper>
       </ContactWrapper>
+      <DeleteContactModal open = {openDeleteModal} handleClose = {onCloseDeleteModal}/>
     </>
   );
 };
