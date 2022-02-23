@@ -1,7 +1,8 @@
 import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
+import Input from "./Input";
 import Box from "@mui/material/Box";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const style = {
   position: "absolute",
@@ -19,27 +20,64 @@ const style = {
 const TitleWrapper = styled.h1`
   margin: 0;
   text-align: center;
+`;
+const InputListWrapper = styled.div`
+  display: flex;
 
-`
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+const FormWrapper = styled.form`
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+`;
+const ButtonsWrapper = styled.div`
+  
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+`;
 
 const AddContactModal = (props) => {
   return (
     <>
       <Modal open={props.open}>
-        <Box sx={style} style={{ height: "300px" }}>
+        <Box sx={style} style={{ height: "350px" }}>
           <TitleWrapper>Cadastre um novo contato</TitleWrapper>
-          <Button
-            style={{ background: "#FF201B", color: "white", fontSize: "15px", marginLeft: '12px' }}
-            onClick={props.handleClose}
-          >
-            Cancelar
-          </Button>
-          <Button
-            style={{ background: "#24a0ed", color: "white", fontSize: "15px", marginLeft: '12px' }}
-            onClick={props.handleClose}
-          >
-            Cadastrar
-          </Button>
+          <FormWrapper>
+            <InputListWrapper>
+              <Input type="text" text="Digite o nome do seu contato" />
+              <Input type="email" text="Digite o e-mail do seu contato" />
+              <Input type="text" text="Digite o telefone do seu contato" />
+            </InputListWrapper>
+            <ButtonsWrapper>
+              <Button
+                style={{
+                  background: "#FF201B",
+                  color: "white",
+                  fontSize: "15px",
+                  marginLeft: "12px",
+                }}
+                onClick={props.handleClose}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                style={{
+                  background: "#24a0ed",
+                  color: "white",
+                  fontSize: "15px",
+                  marginLeft: "12px",
+                }}
+              >
+                Cadastrar
+              </Button>
+            </ButtonsWrapper>
+          </FormWrapper>
         </Box>
       </Modal>
     </>
