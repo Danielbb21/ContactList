@@ -7,6 +7,7 @@ import ContactComponent from "../Components/ContactComponent";
 import { useEffect } from "react";
 import axios from "axios";
 import { UseLogged } from "../Context/UserLogged";
+import {useContacts} from '../Context/UserLogged';
 
 const DUMMY_DATA = [
   {
@@ -112,7 +113,7 @@ const Contacts = () => {
   `;
 
   const [user, setUser] = useState({ name: "", email: "" });
-  const [userContacts, setUserContacts] = useState([]);
+  const {userContacts, setUserContacts} = useContacts();
   
   useEffect(() => {
     const token = localStorage.getItem("token");

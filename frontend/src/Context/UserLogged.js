@@ -9,9 +9,10 @@ export default function UserLoggedProvider({ children }) {
 
   const logged = !!localToken;
   const [isLoggedIn, setIsLoggedIn] = useState(logged);
+  const [userContacts, setUserContacts] = useState([]);
 
   return (
-    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn, userContacts, setUserContacts }}>
       {children}
     </UserLoggedContext.Provider>
   )
@@ -21,4 +22,10 @@ export function UseLogged() {
   const context = useContext(UserLoggedContext);
   const { isLoggedIn, setIsLoggedIn } = context;
   return { isLoggedIn, setIsLoggedIn };
-} 
+}
+
+export function useContacts() {
+  const context = useContext(UserLoggedContext);
+  const { userContacts, setUserContacts } = context;
+  return { userContacts, setUserContacts };
+}

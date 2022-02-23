@@ -9,6 +9,7 @@ import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useContacts } from "../Context/UserLogged";
 
 const style = {
   position: "absolute",
@@ -47,9 +48,8 @@ const ButtonsWrapper = styled.div`
 `;
 
 const AddContactModal = (props) => {
-  
   const [isClicked, setIsClicked] = useState(false);
-
+  const { setUserContacts } = useContacts();
   const {
     value: enteredEmail,
     changeValueHandler: changeEmailHandler,
@@ -104,6 +104,16 @@ const AddContactModal = (props) => {
           cleanPhone();
           cleanEmail();
           props.handleClose();
+          axios
+            .get("http://127.0.0.1:3333/contact", {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+              setUserContacts(response.data);
+            })
+            .catch((err) => {
+              console.log("error", err.message);
+            });
         })
         .catch((err) => {
           toast.error("Algo deu errado", {
