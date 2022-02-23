@@ -125,6 +125,14 @@ const Contacts = () => {
       .catch((err) => {
         console.log("error", err.message);
       });
+      axios.get("http://127.0.0.1:3333/contact", {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(response => {
+          console.log('response.data', response.data);
+      })
+      .catch(err => {
+        console.log("error", err.message);
+      })
   }, []);
 
   const handleLogOut = () => {

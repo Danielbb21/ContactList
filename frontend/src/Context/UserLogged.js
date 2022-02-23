@@ -5,7 +5,10 @@ const UserLoggedContext = createContext();
 
 
 export default function UserLoggedProvider({ children }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const localToken = localStorage.getItem('token') || null;
+
+  const logged = !!localToken;
+  const [isLoggedIn, setIsLoggedIn] = useState(logged);
 
   return (
     <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
