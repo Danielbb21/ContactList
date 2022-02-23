@@ -112,9 +112,11 @@ const Contacts = () => {
   `;
 
   const [user, setUser] = useState({ name: "", email: "" });
+  const [userContacts, setUserContacts] = useState([]);
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    
     axios
       .get("http://127.0.0.1:3333/user", {
         headers: { Authorization: `Bearer ${token}` },
@@ -128,7 +130,8 @@ const Contacts = () => {
       axios.get("http://127.0.0.1:3333/contact", {
         headers: { Authorization: `Bearer ${token}` },
       }).then(response => {
-          console.log('response.data', response.data);
+          
+          setUserContacts(response.data);
       })
       .catch(err => {
         console.log("error", err.message);
@@ -139,6 +142,7 @@ const Contacts = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
+  
 
   return (
     <>
@@ -165,14 +169,15 @@ const Contacts = () => {
           Adcionar contato
         </ButtonWrapper>
         <ContactListWrapper>
-          {DUMMY_DATA.length !== 0 ? (
-            DUMMY_DATA.map((data) => {
+          {userContacts.length !== 0 ? (
+            userContacts.map((data) => {
               return (
                 <ContactComponent
                   key={data.id}
+                  id = {data.id}
                   name={data.name}
                   email={data.email}
-                  image={data.img}
+                  image={"https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg"}
                 />
               );
             })

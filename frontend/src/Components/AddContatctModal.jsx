@@ -47,6 +47,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 const AddContactModal = (props) => {
+  
   const [isClicked, setIsClicked] = useState(false);
 
   const {

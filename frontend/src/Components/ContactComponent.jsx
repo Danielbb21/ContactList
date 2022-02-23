@@ -49,6 +49,7 @@ const ContactComponent = (props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const onOpenDeleteModal = () => {
+    
     setOpenDeleteModal(true);
   }
 
@@ -56,6 +57,7 @@ const ContactComponent = (props) => {
     setOpenDeleteModal(false);
   }
 
+  
   return (
     <>
       <ContactWrapper key={props.id}>
@@ -96,7 +98,7 @@ const ContactComponent = (props) => {
           </Button>
         </ButtonsWrapper>
       </ContactWrapper>
-      <DeleteContactModal open = {openDeleteModal} handleClose = {onCloseDeleteModal}/>
+      <DeleteContactModal open = {openDeleteModal} handleClose = {onCloseDeleteModal} id= {props.id}/>
     </>
   );
 };

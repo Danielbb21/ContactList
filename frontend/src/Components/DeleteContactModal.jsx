@@ -2,6 +2,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import styled from "styled-components";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const style = {
   position: "absolute",
@@ -29,6 +31,34 @@ const ButtonWrapper = styled.div`
 `;
 
 const DeleteContactModal = (props) => {
+
+  const handleDeleteContact = () => {
+    const token = localStorage.getItem("token");
+    axios.delete(`http://127.0.0.1:3333/contact/${props.id}`,{
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(response => {
+      toast.success("Contato deletado", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+
+        progress: undefined,
+      });
+      props.handleClose()
+    })
+    .catch((err) => {
+      toast.error("Algo deu errado", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+
+        progress: undefined,
+      });
+    });
+  };
+
   return (
     <Modal open={props.open}>
       <Box sx={style} style={{ height: "75px" }}>
@@ -47,7 +77,7 @@ const DeleteContactModal = (props) => {
               fontSize: "15px",
               marginLeft: "12px",
             }}
-            onClick={props.handleClose}
+            onClick={handleDeleteContact}
           >
             Sim
           </Button>
