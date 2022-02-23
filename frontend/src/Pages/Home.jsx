@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -70,7 +71,7 @@ const LoginButton = styled.button`
 const RegisterMessage = styled.span`
   font-size: 16px;
   margin-left: 20px;
-  
+
   text-align: center;
 `;
 
@@ -82,18 +83,29 @@ const ToRegisterComponent = styled.a`
 `;
 
 const Home = () => {
+  const history = useNavigate();
+  const handleForm = (event) => {
+    event.preventDefault();
+    history("/my-contacts");
+  };
+
   return (
     <>
       <HomeComponent>
         <ImageComponent />
         <LoginComponent>
           <MessageComponent>Realizar Login</MessageComponent>
-          <FormWrapper>
+          <FormWrapper onSubmit={handleForm}>
             <InputComponent type="email" placeholder="Digite seu e-mail" />
             <InputComponent type="password" placeholder="Digite sua senha" />
             <LoginButton>Login</LoginButton>
           </FormWrapper>
-          <RegisterMessage>Não tem conta? <ToRegisterComponent href="/register">Registre-se Aqui</ToRegisterComponent></RegisterMessage>
+          <RegisterMessage>
+            Não tem conta?{" "}
+            <ToRegisterComponent href="/register">
+              Registre-se Aqui
+            </ToRegisterComponent>
+          </RegisterMessage>
         </LoginComponent>
       </HomeComponent>
     </>
