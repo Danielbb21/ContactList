@@ -21,6 +21,14 @@ export default class ContactsController {
   }
 
 
+  public async index({auth, response }: HttpContextContract) {
+    const id = auth.user?.id;
+    if(!id) return;
+    const user = await User.find(id);
+    if(!user) return response.status(400).json({error: 'User not found'});
+    const contacts = await Contact.query().where('userId', id);
+    return contacts;
+  }
   public async show({ request, response }: HttpContextContract) {
     const { id } = request.params();
     const contact = await Contact.find(id);

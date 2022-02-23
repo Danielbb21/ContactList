@@ -35,6 +35,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('/', 'ContactsController.store')
+  Route.get('/', 'ContactsController.index')
   Route.get('/:id', 'ContactsController.show')
   Route.put('/:id', 'ContactsController.update')
   Route.delete('/:id', 'ContactsController.destroy')
