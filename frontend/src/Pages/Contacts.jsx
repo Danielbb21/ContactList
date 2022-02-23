@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import plus from "../Images/plus.svg";
+import { useState } from "react";
+import AddContatctModal from "../Components/AddContatctModal";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -40,10 +42,20 @@ const ButtonWrapper = styled.button`
 const PlusWrapper = styled.img`
   width: 20px;
   height: 30px;
-  margin-right: 10px; 
+  margin-right: 10px;
 `;
 
 const Contacts = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpenAddContactModal = () => {
+    setOpen(true);
+  };
+
+  const handleCloseAddContactModal = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <HomeComponent>
@@ -51,12 +63,13 @@ const Contacts = () => {
           Olá nome, seja bem vindo, abaixo estão todos os seus contatos
           cadastrados
         </ContactMensage>
-        <ButtonWrapper>
+        <ButtonWrapper onClick={handleOpenAddContactModal}>
           <PlusWrapper src={plus} />
           Adcionar contato
         </ButtonWrapper>
         <ContactListWrapper></ContactListWrapper>
       </HomeComponent>
+      <AddContatctModal open={open} handleClose={handleCloseAddContactModal} />
     </>
   );
 };
