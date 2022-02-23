@@ -3,6 +3,12 @@ import { Button } from "@mui/material";
 import Input from "./Input";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
+import { useState } from "react";
+import useForm from "../Hooks/useForm";
+import { ErrorMessage } from "../Pages/Home";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const style = {
   position: "absolute",
@@ -35,23 +41,117 @@ const FormWrapper = styled.form`
   flex-direction: column;
 `;
 const ButtonsWrapper = styled.div`
-  
   margin-top: 20px;
   display: flex;
   justify-content: space-evenly;
 `;
 
 const AddContactModal = (props) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const {
+    value: enteredEmail,
+    changeValueHandler: changeEmailHandler,
+    hasError: emailError,
+    isValid: emailIsValid,
+    clean: cleanEmail,
+  } = useForm((value) =>
+    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
+  );
+  const {
+    value: enteredName,
+    changeValueHandler: changeNameHandler,
+    hasError: nameError,
+    isValid: nameIsValid,
+    clean: cleanName,
+  } = useForm((value) => value.trim().length !== 0);
+
+  const {
+    value: enteredPhone,
+    changeValueHandler: changePhoneHandler,
+    hasError: phoneError,
+    isValid: phoneIsValid,
+    clean: cleanPhone,
+  } = useForm((value) => value.trim().length !== 0);
+
+  const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
+
+  const handleAddContactSubmit = (event) => {
+    event.preventDefault();
+    setIsClicked(true);
+    const token = localStorage.getItem("token");
+
+    if (formIsValid) {
+      axios
+        .post(
+          "http://127.0.0.1:3333/contact",
+          { name: enteredName, email: enteredEmail, phone: enteredPhone },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((reponse) => {
+          toast.success("Contato criado", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
+          });
+          cleanName();
+          cleanPhone();
+          cleanEmail();
+          props.handleClose();
+        })
+        .catch((err) => {
+          toast.error("Algo deu errado", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
+          });
+        });
+      setIsClicked(false);
+    }
+  };
+
   return (
     <>
       <Modal open={props.open}>
         <Box sx={style} style={{ height: "350px" }}>
           <TitleWrapper>Cadastre um novo contato</TitleWrapper>
-          <FormWrapper>
+          <FormWrapper onSubmit={handleAddContactSubmit}>
             <InputListWrapper>
-              <Input type="text" text="Digite o nome do seu contato" />
-              <Input type="email" text="Digite o e-mail do seu contato" />
-              <Input type="text" text="Digite o telefone do seu contato" />
+              <Input
+                type="text"
+                text="Digite o nome do seu contato"
+                onChange={changeNameHandler}
+                value={enteredName}
+              />
+              {nameError && isClicked && (
+                <ErrorMessage>Nome Invalido</ErrorMessage>
+              )}
+              <Input
+                type="email"
+                text="Digite o e-mail do seu contato"
+                onChange={changeEmailHandler}
+                value={enteredEmail}
+              />
+              {emailError && isClicked && (
+                <ErrorMessage>Email Invalido</ErrorMessage>
+              )}
+              <Input
+                type="text"
+                text="Digite o telefone do seu contato"
+                onChange={changePhoneHandler}
+                value={enteredPhone}
+              />
+              {phoneError && isClicked && (
+                <ErrorMessage>Telefone Invalido</ErrorMessage>
+              )}
             </InputListWrapper>
             <ButtonsWrapper>
               <Button

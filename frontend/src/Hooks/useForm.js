@@ -13,9 +13,13 @@ const useForm = (validateValue) => {
 
     };
 
+    const cleanElement = () =>{
+        setEnteredValue('');
+    }
+
    
     
-    return { value: enteredValue, isValid: valueIsValid,hasError, changeValueHandler }
+    return { value: enteredValue, isValid: valueIsValid,hasError, changeValueHandler , clean: cleanElement}
 }
 
 export default useForm;
