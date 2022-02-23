@@ -16,7 +16,7 @@ function App() {
       <ToastContainer style={{ fontSize: "14px" }} />
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/" element={!isLoggedIn ? < Home/> :  <Navigate to="/my-contacts" replace />}></Route>
           <Route exact path="/register" element={<Register />}></Route>
           <Route exact path="/my-contacts" element={isLoggedIn ? <Contacts /> : <Navigate to="/" replace />}></Route>
         </Routes>

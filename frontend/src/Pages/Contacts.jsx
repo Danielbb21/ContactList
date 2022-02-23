@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import plus from "../Images/plus.svg";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import AddContatctModal from "../Components/AddContatctModal";
 import ContactComponent from "../Components/ContactComponent";
 import { useEffect } from "react";
 import axios from "axios";
+import { UseLogged } from "../Context/UserLogged";
 
 const DUMMY_DATA = [
   {
@@ -78,9 +80,15 @@ const PlusWrapper = styled.img`
   margin-right: 10px;
 `;
 
+const LogoutButtonWrapper = styled.div`
+  position: relative;
+  top: 10;
+  left: 0 !important;
+`;
+
 const Contacts = () => {
   const [open, setOpen] = useState(false);
-
+  const { setIsLoggedIn } = UseLogged();
   const handleOpenAddContactModal = () => {
     setOpen(true);
   };
@@ -103,22 +111,43 @@ const Contacts = () => {
     font-size: 25px;
   `;
 
-  const [user, setUser] = useState({name: '', email: ''})
+  const [user, setUser] = useState({ name: "", email: "" });
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
-    axios.get("http://127.0.0.1:3333/user", {
-      headers: { Authorization: `Bearer ${token}` },
-    }).then(response =>{
-      
-      setUser({name: response.data[0].name, email: response.data[0].email})
-    }).catch(err => {
-      console.log('error', err.message);
-    });
+
+    axios
+      .get("http://127.0.0.1:3333/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUser({ name: response.data[0].name, email: response.data[0].email });
+      })
+      .catch((err) => {
+        console.log("error", err.message);
+      });
   }, []);
+
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
+
   return (
     <>
       <HomeComponent>
+        <LogoutButtonWrapper>
+          <Button
+            style={{
+              background: "#FF201B",
+              color: "white",
+              fontSize: "15px",
+              marginLeft: "12px",
+            }}
+            onClick={handleLogOut}
+          >
+            Sair
+          </Button>
+        </LogoutButtonWrapper>
         <ContactMensage>
           Olá {user.name}, seja bem vindo, abaixo estão todos os seus contatos
           cadastrados
