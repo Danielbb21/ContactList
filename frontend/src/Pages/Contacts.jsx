@@ -2,6 +2,34 @@ import styled from "styled-components";
 import plus from "../Images/plus.svg";
 import { useState } from "react";
 import AddContatctModal from "../Components/AddContatctModal";
+import ContactComponent from "../Components/ContactComponent";
+
+const DUMMY_DATA = [
+  {
+    id: 1,
+    name: "teste1",
+    email: "teste1@teste.com",
+    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
+  },
+  {
+    id: 2,
+    name: "teste2",
+    email: "teste2@teste.com",
+    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
+  },
+  {
+    id: 3,
+    name: "teste3",
+    email: "teste3@teste.com",
+    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
+  },
+  {
+    id: 4,
+    name: "teste4",
+    email: "teste4@teste.com",
+    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
+  },
+];
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -23,6 +51,9 @@ const ContactListWrapper = styled.div`
   height: 450px;
   background-color: white;
   border-radius: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
 `;
 
 const ButtonWrapper = styled.button`
@@ -56,6 +87,20 @@ const Contacts = () => {
     setOpen(false);
   };
 
+  const NoContactWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  const NoContactMessage = styled.h3`
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+  `;
+
   return (
     <>
       <HomeComponent>
@@ -67,7 +112,24 @@ const Contacts = () => {
           <PlusWrapper src={plus} />
           Adcionar contato
         </ButtonWrapper>
-        <ContactListWrapper></ContactListWrapper>
+        <ContactListWrapper>
+          {DUMMY_DATA.length !== 0 ? (
+            DUMMY_DATA.map((data) => {
+              return (
+                <ContactComponent
+                  key={data.id}
+                  name={data.name}
+                  email={data.email}
+                  image={data.img}
+                />
+              );
+            })
+          ) : (
+            <NoContactWrapper>
+              <NoContactMessage>Nenhum contato encontrado</NoContactMessage>
+            </NoContactWrapper>
+          )}
+        </ContactListWrapper>
       </HomeComponent>
       <AddContatctModal open={open} handleClose={handleCloseAddContactModal} />
     </>
