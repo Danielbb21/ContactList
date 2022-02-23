@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import useForm from "../Hooks/useForm";
+import Input from "../Components/Input";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -21,7 +24,7 @@ const ImageComponent = styled.div`
 
 const LoginComponent = styled.div`
   width: 25%;
-  height: 50%;
+  height: 55%;
   background-color: white;
   border-radius: 20px;
 `;
@@ -32,17 +35,17 @@ const MessageComponent = styled.h2`
   text-align: center;
 `;
 
-const InputComponent = styled.input`
-  padding-bottom: 15px;
-  padding-top: 25px;
-  padding-left: 15px;
-  border: none;
-  font-size: 17px;
-  border-bottom: 2px solid #ebebeb;
-  &: focus {
-    outline: none;
-  }
-`;
+// const InputComponent = styled.input`
+//   padding-bottom: 15px;
+//   padding-top: 25px;
+//   padding-left: 15px;
+//   border: none;
+//   font-size: 17px;
+//   border-bottom: 2px solid #ebebeb;
+//   &: focus {
+//     outline: none;
+//   }
+// `;
 
 const FormWrapper = styled.form`
   display: flex;
@@ -82,12 +85,50 @@ const ToRegisterComponent = styled.a`
   cursor: pointer;
 `;
 
+export const ErrorContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ErrorMessage = styled.span`
+  font-size: 15px;
+  color: red;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+`;
+
 const Home = () => {
   const history = useNavigate();
-  const handleForm = (event) => {
+  const [isClicked, setIsClicked] = useState(false);
+  const {
+    value: enteredEmail,
+    changeValueHandler: changeEmailHandler,
+    hasError: emailError,
+    isValid: emailIsValid,
+  } = useForm((value) =>
+    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
+  );
+
+  const {
+    value: enteredPassword,
+    changeValueHandler: changePasswordHandler,
+    hasError: passwordError,
+    isValid: passwordIsValid,
+  } = useForm((value) => value.trim().length >= 6);
+
+  const formIsValid = emailIsValid && passwordIsValid;
+
+  const submitLoginHandler = async (event) => {
     event.preventDefault();
-    history("/my-contacts");
+    setIsClicked(true);
+    if (formIsValid) {
+      //  dispatch(logUser( enteredEmail,enteredPassword));
+      history("/my-contacts");
+      setIsClicked(false);
+    }
   };
+
 
   return (
     <>
@@ -95,9 +136,26 @@ const Home = () => {
         <ImageComponent />
         <LoginComponent>
           <MessageComponent>Realizar Login</MessageComponent>
-          <FormWrapper onSubmit={handleForm}>
-            <InputComponent type="email" placeholder="Digite seu e-mail" />
-            <InputComponent type="password" placeholder="Digite sua senha" />
+          <FormWrapper onSubmit={submitLoginHandler}>
+            <Input
+              type="email"
+              text="Digite seu E-mail"
+              onChange={changeEmailHandler}
+              value={enteredEmail}
+            />
+            {emailError && isClicked && (
+              <ErrorMessage>Email Invalido</ErrorMessage>
+            )}
+
+            <Input
+              type="password"
+              text="Password"
+              onChange={changePasswordHandler}
+              value={enteredPassword}
+            />
+            {passwordError && isClicked && (
+              <ErrorMessage>Password Invalido</ErrorMessage>
+            )}
             <LoginButton>Login</LoginButton>
           </FormWrapper>
           <RegisterMessage>
