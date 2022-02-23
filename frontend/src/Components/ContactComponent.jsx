@@ -7,7 +7,7 @@ import DeleteContactModal from "./DeleteContactModal";
 
 const ContactWrapper = styled.div`
   width: 200px;
-  height: 230px;
+  height: 270px;
   background-color: #d3d3d3;
   border-radius: 15px;
   margin: 12px;
@@ -44,6 +44,8 @@ const ButtonsWrapper = styled.div`
   justify-content: flex-end;
 `;
 
+
+
 const ContactComponent = (props) => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -70,6 +72,9 @@ const ContactComponent = (props) => {
         <ImageWrapper>
           <Image src={props.image} alt={props.name} />
         </ImageWrapper>
+        <InfoWrapper>
+          Telefone: <InfoText>{props.phone}</InfoText>
+        </InfoWrapper>
         <ButtonsWrapper>
           <Button
             type="submit"

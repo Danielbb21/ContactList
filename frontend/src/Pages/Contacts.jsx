@@ -178,6 +178,7 @@ const Contacts = () => {
                   id = {data.id}
                   name={data.name}
                   email={data.email}
+                  phone = {data.phone}
                   image={"https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg"}
                 />
               );
