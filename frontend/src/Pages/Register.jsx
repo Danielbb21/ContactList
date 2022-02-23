@@ -7,6 +7,7 @@ import Input from "../Components/Input";
 import { ErrorMessage } from "./Home";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -123,16 +124,33 @@ const Register = () => {
     event.preventDefault();
     setIsClicked(true);
     if (formIsValid) {
-      //  dispatch(logUser( enteredEmail,enteredPassword));
-      toast.success('Conta criada', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
+      axios.post('http://127.0.0.1:3333/user', {
+        name: enteredName,
+        email: enteredEmail,
+        password: enteredPassword
+      }).then(response => {
+        toast.success('Conta criada', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          
+          progress: undefined,
+          });
+        history("/");
+      })
+      .catch(err => {
+        toast.error('Algo deu errado', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          
+          progress: undefined,
+          });
         
-        progress: undefined,
-        });
-      history("/");
+      })
+      
       setIsClicked(false);
     }
   };
