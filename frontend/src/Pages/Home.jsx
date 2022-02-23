@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useForm from "../Hooks/useForm";
 import Input from "../Components/Input";
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -123,8 +125,34 @@ const Home = () => {
     event.preventDefault();
     setIsClicked(true);
     if (formIsValid) {
-      //  dispatch(logUser( enteredEmail,enteredPassword));
-      history("/my-contacts");
+      axios.post('http://127.0.0.1:3333/session' ,{
+        email: enteredEmail,
+        password: enteredPassword
+      }).then(response => {
+        console.log('response', response.data);
+        toast.success('Usuário logado', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          
+          progress: undefined,
+          });
+        history("/my-contacts");
+      })
+      .catch(err => {
+        toast.error('Algo deu errado', {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          
+          progress: undefined,
+          });
+        
+      })
+
+      
       setIsClicked(false);
     }
   };
