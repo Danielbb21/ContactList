@@ -5,6 +5,8 @@ import useForm from "../Hooks/useForm";
 import { useState } from "react";
 import Input from "../Components/Input";
 import { ErrorMessage } from "./Home";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -122,6 +124,14 @@ const Register = () => {
     setIsClicked(true);
     if (formIsValid) {
       //  dispatch(logUser( enteredEmail,enteredPassword));
+      toast.success('Conta criada', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        
+        progress: undefined,
+        });
       history("/");
       setIsClicked(false);
     }
