@@ -87,7 +87,7 @@ const AddContactModal = (props) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          console.log("teste", response.data);
+          
           changeEmailHandler(response.data.email);
           changeNameHandler(response.data.name);
           changePhoneHandler(response.data.phone);
@@ -96,7 +96,7 @@ const AddContactModal = (props) => {
           console.log("error", err.message);
         });
     }
-  }, [props.id]);
+  }, [props.id,changeEmailHandler, changeNameHandler, changePhoneHandler]);
 
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();

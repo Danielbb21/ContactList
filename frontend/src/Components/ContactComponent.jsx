@@ -74,7 +74,7 @@ const ContactComponent = (props) => {
   }
 
   const url = props.image ? `http://127.0.0.1:3333${props.image}` : 'https://i.stack.imgur.com/l60Hf.png';
-  console.log('dataImage', url);
+  
 
   return (
     <>
