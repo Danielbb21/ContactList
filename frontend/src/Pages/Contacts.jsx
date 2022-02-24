@@ -29,10 +29,36 @@ const ContactListWrapper = styled.div`
   width: 700px;
   height: 450px;
   background-color: white;
-  border-radius: 50px;
+  border-radius: 25px;
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
+  }
 `;
 
 const ButtonWrapper = styled.button`
@@ -95,9 +121,9 @@ const Contacts = () => {
 
   const [user, setUser] = useState({ name: "", email: "" });
   const { userContacts, setUserContacts } = useContacts();
-  
+
   const { actualPage, setActualPage } = usePage();
-  const {allPages, setAllPages} = useAllPages();
+  const { allPages, setAllPages } = useAllPages();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -123,14 +149,15 @@ const Contacts = () => {
         for (let i = 1; i <= response.data.meta.last_page; i++) {
           pages.push(i);
         }
-        if(response.data.data.length === 0 && response.data.meta.last_page === 1){
+        if (
+          response.data.data.length === 0 &&
+          response.data.meta.last_page === 1
+        ) {
           setAllPages(0);
-        }
-        else{
-
+        } else {
           setAllPages(pages);
         }
-        
+
         setUserContacts(response.data.data);
       })
       .catch((err) => {
@@ -142,7 +169,6 @@ const Contacts = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
-  
 
   return (
     <>
@@ -189,24 +215,25 @@ const Contacts = () => {
           )}
         </ContactListWrapper>
         <PagesButtonWrapper>
-          {allPages.length > 0 && allPages.map((p, index) => {
-            return (
-              <>
-                <Button
-                  style={{
-                    background: p === actualPage ? "#103a53" : "",
-                    color: p === actualPage ? "white" : "black",
-                    fontSize: "15px",
-                    marginRight: '15px'
-                  }}
-                  key={index}
-                  onClick={() => setActualPage(+p)}
-                >
-                  {p}
-                </Button>
-              </>
-            );
-          })}
+          {allPages.length > 0 &&
+            allPages.map((p, index) => {
+              return (
+                <>
+                  <Button
+                    style={{
+                      background: p === actualPage ? "#103a53" : "",
+                      color: p === actualPage ? "white" : "black",
+                      fontSize: "15px",
+                      marginRight: "15px",
+                    }}
+                    key={index}
+                    onClick={() => setActualPage(+p)}
+                  >
+                    {p}
+                  </Button>
+                </>
+              );
+            })}
         </PagesButtonWrapper>
       </HomeComponent>
       <AddContatctModal
