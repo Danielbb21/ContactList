@@ -111,7 +111,7 @@ const Contacts = () => {
       .catch(err => {
         console.log("error", err.message);
       })
-  }, []);
+  }, [setUserContacts]);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");

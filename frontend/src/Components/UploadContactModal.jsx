@@ -2,10 +2,7 @@ import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 import Input from "./Input";
 import Box from "@mui/material/Box";
-import styled from "styled-components";
-
-import useForm from "../Hooks/useForm";
-import { ErrorMessage } from "../Pages/Home";
+// import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,7 +15,7 @@ import {
   InputListWrapper,
   TitleWrapper,
 } from "./AddContatctModal";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 const style = {
   position: "absolute",

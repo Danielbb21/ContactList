@@ -102,7 +102,7 @@ export const ErrorMessage = styled.span`
 `;
 
 const Home = () => {
-  const {isLoggedIn, setIsLoggedIn} = UseLogged();
+  const { setIsLoggedIn} = UseLogged();
   const history = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const {

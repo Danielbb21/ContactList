@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import Input from "./Input";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useForm from "../Hooks/useForm";
 import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
@@ -77,7 +77,7 @@ const AddContactModal = (props) => {
     clean: cleanPhone,
   } = useForm((value) => /\(?([0-9]{2})\)?([ .-]?)([0-9]{5})-([0-9]{4})/.test(value));
 
-  const [dataPushed, setDataPushed] = useState(false);
+  
   
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();

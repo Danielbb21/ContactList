@@ -4,7 +4,6 @@ import trash from "../Images/trash.svg";
 import pencil from "../Images/pencil.svg";
 import { useState } from "react";
 import DeleteContactModal from "./DeleteContactModal";
-import AddContatctModal from './AddContatctModal';
 import UploadContactModal from "./UploadContactModal";
 import {useUpdateData} from '../Context/UserLogged';
 
