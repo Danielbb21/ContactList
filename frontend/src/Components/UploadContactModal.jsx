@@ -108,9 +108,7 @@ const UploadContactModal = (props) => {
                 }
                 value={updateData && updateData.name}
               />
-              {/* {nameError && isClicked && (
-          <ErrorMessage>Nome Invalido</ErrorMessage>
-        )} */}
+         
               <Input
                 type="email"
                 text="Digite o e-mail do seu contato"
@@ -122,9 +120,7 @@ const UploadContactModal = (props) => {
                 }
                 value={updateData && updateData.email}
               />
-              {/* {emailError && isClicked && (
-          <ErrorMessage>Email Invalido</ErrorMessage>
-        )} */}
+        
               <InputMask
                 mask="(99) 99999-9999"
                 onChange={(event) =>
@@ -141,11 +137,11 @@ const UploadContactModal = (props) => {
                   disableUnderline
                 />
               </InputMask>
-              {/* {phoneError && isClicked && (
-              <ErrorMessage>Telefone Invalido</ErrorMessage>
-            )} */}
-              <Input
+            
+              <input
                 type="file"
+                style={{marginTop: '10px', fontSize: '14px'}}
+                accept="image/x-png,image/gif,image/jpeg" 
                 onChange={(event) => setFile(event.target.files[0])}
               />
             </InputListWrapper>

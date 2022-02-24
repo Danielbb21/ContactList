@@ -187,8 +187,10 @@ const AddContactModal = (props) => {
               {phoneError && isClicked && (
                 <ErrorMessage>Telefone Invalido</ErrorMessage>
               )}
-              <Input
+              <input
                 type="file"
+                style={{marginTop: '10px', fontSize: '14px'}}
+                accept="image/x-png,image/gif,image/jpeg" 
                 onChange={(event) => setFile(event.target.files[0])}
               />
             </InputListWrapper>

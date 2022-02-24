@@ -34,7 +34,7 @@ const ContactMensage = styled.h1`
 `;
 
 const ContactListWrapper = styled.div`
-  width: 700px;
+  width: 900px;
   height: 450px;
   background-color: white;
   border-radius: 25px;
