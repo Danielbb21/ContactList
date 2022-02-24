@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts, useUpdateData } from "../Context/UserLogged";
+import { useContacts, useUpdateData, usePage } from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
 import {
@@ -15,7 +15,7 @@ import {
   InputListWrapper,
   TitleWrapper,
 } from "./AddContatctModal";
-import {  useState } from "react";
+import { useState } from "react";
 
 const style = {
   position: "absolute",
@@ -31,85 +31,82 @@ const style = {
 };
 
 const UploadContactModal = (props) => {
-  const {updateData, setUpdateData} = useUpdateData();
+  const { updateData, setUpdateData } = useUpdateData();
   // const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-
+  const { actualPage } = usePage();
   const [file, setFile] = useState();
   const { setUserContacts } = useContacts();
-  
-  
+
   const handleUpdateData = (event) => {
     event.preventDefault();
     const token = localStorage.getItem("token");
+    
+    
+    let formData = new FormData();
+    formData.append("name", updateData.name);
+    formData.append("email", updateData.email);
+    formData.append("phone", updateData.phone);
+    formData.append("image", file);
+    axios
+      .put(`http://127.0.0.1:3333/contact/${props.id}`, formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((reponse) => {
+        toast.success("Contato Atualizado", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
 
-    // if (formIsValid) {
-      let formData = new FormData();
-      formData.append("name",updateData.name);
-      formData.append("email", updateData.email);
-      formData.append("phone", updateData.phone);
-      formData.append("image", file);
-      axios
-        .put(`http://127.0.0.1:3333/contact/${props.id}`, formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((reponse) => {
-          toast.success("Contato Atualizado", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-
-            progress: undefined,
-          });
-          
-          
-          props.handleClose();
-          axios
-            .get("http://127.0.0.1:3333/contact", {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
-              setUserContacts(response.data);
-            })
-            .catch((err) => {
-              console.log("error", err.message);
-            });
-        })
-        .catch((err) => {
-          toast.error("Algo deu errado", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-
-            progress: undefined,
-          });
+          progress: undefined,
         });
-      // setIsClicked(false);
-    // }
-  };
+
+        props.handleClose();
+        axios
+          .get("http://127.0.0.1:3333/contact", {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { page: actualPage },
+          })
+          .then((response) => {
+            setUserContacts(response.data.data);
+          })
+          .catch((err) => {
+            console.log("error", err.message);
+          });
+      })
+      .catch((err) => {
+        toast.error("Algo deu errado", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+
+          progress: undefined,
+        });
+      });
   
+  };
 
   return (
     <>
       <Modal open={props.open}>
         <Box sx={style} style={{ height: "350px" }}>
           <TitleWrapper>Atualize o contato</TitleWrapper>
-          <FormWrapper
-          onSubmit={handleUpdateData }
-          >
+          <FormWrapper onSubmit={handleUpdateData}>
             <InputListWrapper>
               <Input
                 type="text"
                 text="Digite o nome do seu contato"
-                onChange={(event) => setUpdateData((previus) => {
-                  let obj = {...previus, name: event.target.value};
-                  return obj;
-                })}
-                value={updateData  && updateData.name}
+                onChange={(event) =>
+                  setUpdateData((previus) => {
+                    let obj = { ...previus, name: event.target.value };
+                    return obj;
+                  })
+                }
+                value={updateData && updateData.name}
               />
               {/* {nameError && isClicked && (
           <ErrorMessage>Nome Invalido</ErrorMessage>
@@ -117,22 +114,26 @@ const UploadContactModal = (props) => {
               <Input
                 type="email"
                 text="Digite o e-mail do seu contato"
-                onChange={(event) => setUpdateData((previus) => {
-                  let obj = {...previus, email: event.target.value};
-                  return obj;
-                })}
-                value={updateData  && updateData.email}
+                onChange={(event) =>
+                  setUpdateData((previus) => {
+                    let obj = { ...previus, email: event.target.value };
+                    return obj;
+                  })
+                }
+                value={updateData && updateData.email}
               />
               {/* {emailError && isClicked && (
           <ErrorMessage>Email Invalido</ErrorMessage>
         )} */}
               <InputMask
                 mask="(99) 99999-9999"
-                onChange={(event) => setUpdateData((previus) => {
-                  let obj = {...previus, phone: event.target.value};
-                  return obj;
-                })}
-                value={updateData  && updateData.phone}
+                onChange={(event) =>
+                  setUpdateData((previus) => {
+                    let obj = { ...previus, phone: event.target.value };
+                    return obj;
+                  })
+                }
+                value={updateData && updateData.phone}
               >
                 <Input
                   type="tel"
@@ -168,7 +169,9 @@ const UploadContactModal = (props) => {
                   fontSize: "15px",
                   marginLeft: "12px",
                 }}
-              >Atualizar</Button>
+              >
+                Atualizar
+              </Button>
             </ButtonsWrapper>
           </FormWrapper>
         </Box>
