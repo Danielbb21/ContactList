@@ -10,8 +10,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useContacts } from "../Context/UserLogged";
-import FormData from 'form-data';
-
+import FormData from "form-data";
 
 const style = {
   position: "absolute",
@@ -77,18 +76,18 @@ const AddContactModal = (props) => {
     clean: cleanPhone,
   } = useForm((value) => value.trim().length !== 0);
 
-  console.log('fi', props.id);
+  console.log("fi", props.id);
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (props.id) {
-      console.log('propsffrf', props.id);
+      console.log("propsffrf", props.id);
       axios
         .get(`http://127.0.0.1:3333/contact/${props.id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
-          console.log('teste', response.data);
+          console.log("teste", response.data);
           changeEmailHandler(response.data.email);
           changeNameHandler(response.data.name);
           changePhoneHandler(response.data.phone);
@@ -109,18 +108,17 @@ const AddContactModal = (props) => {
 
     if (formIsValid) {
       let formData = new FormData();
-      formData.append('name', enteredName);
-      formData.append('email', enteredEmail);
-      formData.append('phone', enteredPhone);
-      formData.append('image', file)
+      formData.append("name", enteredName);
+      formData.append("email", enteredEmail);
+      formData.append("phone", enteredPhone);
+      formData.append("image", file);
       axios
-        .post(
-          "http://127.0.0.1:3333/contact",
-          formData,
-          {
-            headers: { 'content-type': 'multipart/form-data', Authorization: `Bearer ${token}` },
-          }
-        )
+        .post("http://127.0.0.1:3333/contact", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((reponse) => {
           toast.success("Contato criado", {
             position: "top-right",
@@ -159,21 +157,23 @@ const AddContactModal = (props) => {
     }
   };
 
-  
-
   const handleUpdateData = (event) => {
     event.preventDefault();
     const token = localStorage.getItem("token");
 
     if (formIsValid) {
+      let formData = new FormData();
+      formData.append("name", enteredName);
+      formData.append("email", enteredEmail);
+      formData.append("phone", enteredPhone);
+      formData.append("image", file);
       axios
-        .put(
-          `http://127.0.0.1:3333/contact/${props.id}`,
-          { name: enteredName, email: enteredEmail, phone: enteredPhone },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        .put(`http://127.0.0.1:3333/contact/${props.id}`, formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((reponse) => {
           toast.success("Contato Atualizado", {
             position: "top-right",
@@ -212,8 +212,6 @@ const AddContactModal = (props) => {
     }
   };
 
-  
-  
   return (
     <>
       <Modal open={props.open}>
@@ -252,7 +250,10 @@ const AddContactModal = (props) => {
               {phoneError && isClicked && (
                 <ErrorMessage>Telefone Invalido</ErrorMessage>
               )}
-              <Input type="file" onChange={(event) => setFile(event.target.files[0])}/>
+              <Input
+                type="file"
+                onChange={(event) => setFile(event.target.files[0])}
+              />
             </InputListWrapper>
             <ButtonsWrapper>
               <Button
