@@ -4,23 +4,23 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../Hooks/useForm";
 import { useState } from "react";
 import Input from "../Components/Input";
-import { ErrorMessage, ImageComponent } from "./Home";
+import { AllPageComponent, ErrorMessage, HomeComponent, ImageComponent, WelcomeInfo, WelcomeMessage } from "./Home";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-const HomeComponent = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #d3d3d3;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-`;
+// const HomeComponent = styled.div`
+//   height: 100vh;
+//   width: 100vw;
+//   background-color: #d3d3d3;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-evenly;
+// `;
 
 const LoginComponent = styled.div`
   width: 25%;
-  height: 65%;
+  height: 90%;
   background-color: white;
   border-radius: 20px;
 `;
@@ -154,57 +154,65 @@ const Register = () => {
     history("/");
   };
   return (
-    <HomeComponent>
-      <ImageComponent
-        src={
-          "https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png"
-        }
-      />
-      <LoginComponent>
-        <MessageComponent>Realize seu cadastro</MessageComponent>
-        <FormWrapper onSubmit={submitRegisterHandler}>
-          <Input
-            type="text"
-            text="Digite o seu Name"
-            onChange={changeNameHandler}
-            value={enteredName}
-          />
-
-          {nameError && isClicked && <ErrorMessage>Nome invalido</ErrorMessage>}
-
-          <Input
-            type="email"
-            text="Digite seu E-mail"
-            onChange={changeEmailHandler}
-            value={enteredEmail}
-          />
-
-          {emailError && isClicked && (
-            <ErrorMessage>Email Invalido</ErrorMessage>
-          )}
-
-          <Input
-            type="password"
-            text="Digite sua senha"
-            onChange={changePasswordHandler}
-            value={enteredPassword}
-          />
-
-          {passwordError && isClicked && (
-            <ErrorMessage>Password Invalido</ErrorMessage>
-          )}
-
-          <RegisterButton>Cadastro</RegisterButton>
-          <BackMessageWrapper onClick={backToLogin}>
-            <BackArrowComponent
-              src={backArrow}
-              alt="Seta para voltar ao login"
+    <AllPageComponent>
+      <WelcomeMessage>
+        <WelcomeMessage>Minha lista de contatos</WelcomeMessage>
+        <WelcomeInfo>Salve seus contatos de forma fácil e rapida</WelcomeInfo>
+      </WelcomeMessage>
+      <HomeComponent>
+        <ImageComponent
+          src={
+            "https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png"
+          }
+        />
+        <LoginComponent>
+          <MessageComponent>Realize seu cadastro</MessageComponent>
+          <FormWrapper onSubmit={submitRegisterHandler}>
+            <Input
+              type="text"
+              text="Digite o seu Name"
+              onChange={changeNameHandler}
+              value={enteredName}
             />
-            <BackMessage>Voltar pro login</BackMessage>
-          </BackMessageWrapper>
-        </FormWrapper>
-      </LoginComponent>
-    </HomeComponent>
+
+            {nameError && isClicked && (
+              <ErrorMessage>Nome invalido</ErrorMessage>
+            )}
+
+            <Input
+              type="email"
+              text="Digite seu E-mail"
+              onChange={changeEmailHandler}
+              value={enteredEmail}
+            />
+
+            {emailError && isClicked && (
+              <ErrorMessage>Email Invalido</ErrorMessage>
+            )}
+
+            <Input
+              type="password"
+              text="Digite sua senha"
+              onChange={changePasswordHandler}
+              value={enteredPassword}
+            />
+
+            {passwordError && isClicked && (
+              <ErrorMessage>Password Invalido</ErrorMessage>
+            )}
+
+            <RegisterButton>Cadastro</RegisterButton>
+            <BackMessageWrapper onClick={backToLogin}>
+              <BackArrowComponent
+                src={backArrow}
+                alt="Seta para voltar ao login"
+              />
+              <BackMessage>Voltar pro login</BackMessage>
+            </BackMessageWrapper>
+          </FormWrapper>
+        </LoginComponent>
+      </HomeComponent>
+    </AllPageComponent>
   );
 };
 

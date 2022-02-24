@@ -8,11 +8,12 @@ import UploadContactModal from "./UploadContactModal";
 import {useUpdateData} from '../Context/UserLogged';
 
 const ContactWrapper = styled.div`
-  width: 200px;
-  height: 270px;
+  width: 230px;
+  height: 280px;
   background-color: #d3d3d3;
   border-radius: 15px;
   margin: 12px;
+  overflow: auto;
 `;
 
 const InfoWrapper = styled.p`
@@ -20,10 +21,12 @@ const InfoWrapper = styled.p`
   font-weight: bold;
   margin-top: 5px;
   margin-left: 5px;
+  word-break: break-all;
 `;
 
 const InfoText = styled.span`
   font-weight: normal;
+  width: 100%;
   margin: 0;
 `;
 

@@ -21,7 +21,8 @@ const HomeComponent = styled.div`
   width: 100vw;
   background-color: #d3d3d3; */
   display: flex;
-  flex: 1;
+  /* flex: 1; */
+  height:90vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;

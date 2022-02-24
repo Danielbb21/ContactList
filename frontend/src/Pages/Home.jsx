@@ -3,29 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useForm from "../Hooks/useForm";
 import Input from "../Components/Input";
-import axios from 'axios';
+import axios from "axios";
 import { toast } from "react-toastify";
-import {UseLogged} from '../Context/UserLogged';
+import { UseLogged } from "../Context/UserLogged";
 
-const HomeComponent = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #d3d3d3;
+export const HomeComponent = styled.div`
   display: flex;
+  height: 75vh;
   align-items: center;
   justify-content: space-evenly;
 `;
 
 export const ImageComponent = styled.img`
-  
   opacity: 0.7;
-  
- 
 `;
 
 const LoginComponent = styled.div`
   width: 25%;
-  height: 55%;
+  height: 70%;
   background-color: white;
   border-radius: 20px;
 `;
@@ -35,8 +30,6 @@ const MessageComponent = styled.h2`
   font-size: 25px;
   text-align: center;
 `;
-
-
 
 const FormWrapper = styled.form`
   display: flex;
@@ -89,8 +82,36 @@ export const ErrorMessage = styled.span`
   text-align: center;
 `;
 
+export const AllPageComponent = styled.div`
+  height: 100vh;
+  width: 100vw;
+  background-color: #d3d3d3;
+`;
+export const WelcomeMessagewrapper = styled.div`
+  margin-top: 10px;
+  height: 25vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const WelcomeMessage = styled.h1`
+  font-size: 35px;
+  text-align: center;
+  margin: 0;
+
+  
+`;
+
+export const WelcomeInfo = styled.h3`
+  text-align: center;
+  margin: 0;
+  font-size: 20px;
+`;
+
 const Home = () => {
-  const { setIsLoggedIn} = UseLogged();
+  const { setIsLoggedIn } = UseLogged();
   const history = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const {
@@ -115,45 +136,51 @@ const Home = () => {
     event.preventDefault();
     setIsClicked(true);
     if (formIsValid) {
-      axios.post('http://127.0.0.1:3333/session' ,{
-        email: enteredEmail,
-        password: enteredPassword
-      }).then(response => {
-        
-        localStorage.setItem("token",response.data.token);
-        setIsLoggedIn(true);
-        toast.success('Você está logado', {
-          position: "top-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          
-          progress: undefined,
-          });
-        history("/my-contacts");
-      })
-      .catch(err => {
-        toast.error('Algo deu errado', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          
-          progress: undefined,
-          });
-        
-      })
+      axios
+        .post("http://127.0.0.1:3333/session", {
+          email: enteredEmail,
+          password: enteredPassword,
+        })
+        .then((response) => {
+          localStorage.setItem("token", response.data.token);
+          setIsLoggedIn(true);
+          toast.success("Você está logado", {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
 
-      
+            progress: undefined,
+          });
+          history("/my-contacts");
+        })
+        .catch((err) => {
+          toast.error("Algo deu errado", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
+          });
+        });
+
       setIsClicked(false);
     }
   };
 
-
   return (
-    <>
+    <AllPageComponent>
+      <WelcomeMessage>
+        <WelcomeMessage>Minha lista de contatos</WelcomeMessage>
+        <WelcomeInfo>Salve seus contatos de forma fácil e rapida</WelcomeInfo>
+      </WelcomeMessage>
       <HomeComponent>
-        <ImageComponent src ={'https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png'}/>
+        <ImageComponent
+          src={
+            "https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png"
+          }
+        />
         <LoginComponent>
           <MessageComponent>Realizar Login</MessageComponent>
           <FormWrapper onSubmit={submitLoginHandler}>
@@ -186,7 +213,7 @@ const Home = () => {
           </RegisterMessage>
         </LoginComponent>
       </HomeComponent>
-    </>
+    </AllPageComponent>
   );
 };
 

@@ -54,7 +54,7 @@ const AddContactModal = (props) => {
   const { setUserContacts } = useContacts();
   const { actualPage } = usePage();
   const {setAllPages} = useAllPages();
-  
+
   const {
     value: enteredEmail,
     changeValueHandler: changeEmailHandler,
@@ -151,7 +151,7 @@ const AddContactModal = (props) => {
   return (
     <>
       <Modal open={props.open}>
-        <Box sx={style} style={{ height: "350px" }}>
+        <Box sx={style} style={{ height: "400px" }}>
           <TitleWrapper>Cadastre um novo contato</TitleWrapper>
           <FormWrapper onSubmit={handleAddContactSubmit}>
             <InputListWrapper>
