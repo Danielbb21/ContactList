@@ -4,6 +4,7 @@ import trash from "../Images/trash.svg";
 import pencil from "../Images/pencil.svg";
 import { useState } from "react";
 import DeleteContactModal from "./DeleteContactModal";
+import AddContatctModal from './AddContatctModal';
 
 const ContactWrapper = styled.div`
   width: 200px;
@@ -49,6 +50,9 @@ const ButtonsWrapper = styled.div`
 const ContactComponent = (props) => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  // const [contactId = setContactId] = useState('');
+  const [data, setDate] = useState('');
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
 
   const onOpenDeleteModal = () => {
     
@@ -59,7 +63,15 @@ const ContactComponent = (props) => {
     setOpenDeleteModal(false);
   }
 
-  
+  const onOpenUpdateModal = () => {
+    setDate(props.id);
+    setOpenUpdateModal(true);
+  }
+
+  const onCloseUpdateModal = () => {
+    setOpenUpdateModal(false);
+  }
+
   return (
     <>
       <ContactWrapper key={props.id}>
@@ -90,7 +102,7 @@ const ContactComponent = (props) => {
             <img src={trash} style={{ color: "white" }} alt="deletar contato"/>
           </Button>
           <Button
-            type="submit"
+            onClick ={onOpenUpdateModal}
             style={{
               background: "#24a0ed",
               color: "white",
@@ -104,6 +116,7 @@ const ContactComponent = (props) => {
         </ButtonsWrapper>
       </ContactWrapper>
       <DeleteContactModal open = {openDeleteModal} handleClose = {onCloseDeleteModal} id= {props.id}/>
+      <AddContatctModal open={openUpdateModal} handleClose={onCloseUpdateModal} id = {props.id} name={props.name} email={props.email} phone = {props.phone}/>
     </>
   );
 };

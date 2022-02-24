@@ -9,32 +9,6 @@ import axios from "axios";
 import { UseLogged } from "../Context/UserLogged";
 import {useContacts} from '../Context/UserLogged';
 
-const DUMMY_DATA = [
-  {
-    id: 1,
-    name: "teste1",
-    email: "teste1@teste.com",
-    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
-  },
-  {
-    id: 2,
-    name: "teste2",
-    email: "teste2@teste.com",
-    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
-  },
-  {
-    id: 3,
-    name: "teste3",
-    email: "teste3@teste.com",
-    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
-  },
-  {
-    id: 4,
-    name: "teste4",
-    email: "teste4@teste.com",
-    img: "https://static1.conquistesuavida.com.br/articles//4/56/84/@/18404-gente-que-da-prioridade-aos-sentimentos-article_gallery-2.jpg",
-  },
-];
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -190,7 +164,7 @@ const Contacts = () => {
           )}
         </ContactListWrapper>
       </HomeComponent>
-      <AddContatctModal open={open} handleClose={handleCloseAddContactModal} />
+      <AddContatctModal open={open} handleClose={handleCloseAddContactModal} id={''}/>
     </>
   );
 };

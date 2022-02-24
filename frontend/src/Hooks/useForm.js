@@ -9,7 +9,14 @@ const useForm = (validateValue) => {
 
 
     const changeValueHandler = (event) => {
-        setEnteredValue(event.currentTarget.value);
+        // console.log('event', event);
+        if(event.currentTarget === undefined){
+            
+            setEnteredValue(event.toString());
+        }else{
+
+            setEnteredValue(event.currentTarget.value);
+        }
 
     };
 

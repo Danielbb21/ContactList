@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import Input from "./Input";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useForm from "../Hooks/useForm";
 import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
@@ -75,6 +75,28 @@ const AddContactModal = (props) => {
     clean: cleanPhone,
   } = useForm((value) => value.trim().length !== 0);
 
+  console.log('fi', props.id);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (props.id) {
+      console.log('propsffrf', props.id);
+      axios
+        .get(`http://127.0.0.1:3333/contact/${props.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          console.log('teste', response.data);
+          changeEmailHandler(response.data.email);
+          changeNameHandler(response.data.name);
+          changePhoneHandler(response.data.phone);
+        })
+        .catch((err) => {
+          console.log("error", err.message);
+        });
+    }
+  }, []);
+
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
 
   const handleAddContactSubmit = (event) => {
@@ -129,12 +151,67 @@ const AddContactModal = (props) => {
     }
   };
 
+  const handleUpdateData = (event) => {
+    event.preventDefault();
+    const token = localStorage.getItem("token");
+
+    if (formIsValid) {
+      axios
+        .put(
+          `http://127.0.0.1:3333/contact/${props.id}`,
+          { name: enteredName, email: enteredEmail, phone: enteredPhone },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((reponse) => {
+          toast.success("Contato Atualizado", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
+          });
+          cleanName();
+          cleanPhone();
+          cleanEmail();
+          props.handleClose();
+          axios
+            .get("http://127.0.0.1:3333/contact", {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+              setUserContacts(response.data);
+            })
+            .catch((err) => {
+              console.log("error", err.message);
+            });
+        })
+        .catch((err) => {
+          toast.error("Algo deu errado", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
+          });
+        });
+      setIsClicked(false);
+    }
+  };
+
   return (
     <>
       <Modal open={props.open}>
         <Box sx={style} style={{ height: "350px" }}>
-          <TitleWrapper>Cadastre um novo contato</TitleWrapper>
-          <FormWrapper onSubmit={handleAddContactSubmit}>
+          <TitleWrapper>
+            {props.id ? "Atualize o contato" : "Cadastre um novo contato"}
+          </TitleWrapper>
+          <FormWrapper
+            onSubmit={props.id ? handleUpdateData : handleAddContactSubmit}
+          >
             <InputListWrapper>
               <Input
                 type="text"
@@ -185,7 +262,7 @@ const AddContactModal = (props) => {
                   marginLeft: "12px",
                 }}
               >
-                Cadastrar
+                {props.id ? "Atualizar" : "Cadastrar"}
               </Button>
             </ButtonsWrapper>
           </FormWrapper>
