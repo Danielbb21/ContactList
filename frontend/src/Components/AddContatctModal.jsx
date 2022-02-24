@@ -106,7 +106,7 @@ const AddContactModal = (props) => {
       formData.append("email", enteredEmail);
       formData.append("phone", enteredPhone);
       formData.append("image", file);
-      console.log("formData", formData);
+      
       axios
         .post("http://127.0.0.1:3333/contact", formData, {
           headers: {

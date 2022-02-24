@@ -55,9 +55,9 @@ const DeleteContactModal = (props) => {
           progress: undefined,
         });
         props.handleClose();
-        console.log("length", userContacts.length, actualPage);
+        
         if (userContacts.length === 1 && actualPage !== 1) {
-          console.log("awquii");
+          
           const pageAtual = actualPage -1;
           setActualPage(pageAtual);
         }

@@ -132,6 +132,10 @@ const FilterWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
+const AddContactMessage = styled.span`
+  font-size: "16px";
+`;
+
 const Contacts = () => {
   const [open, setOpen] = useState(false);
   const { setIsLoggedIn } = UseLogged();
@@ -183,7 +187,6 @@ const Contacts = () => {
             },
           })
           .then((response) => {
-            console.log("response.data.lastPage", response.data);
             let pages = [];
             for (let i = 1; i <= response.data.meta.last_page; i++) {
               pages.push(i);
@@ -218,7 +221,6 @@ const Contacts = () => {
           },
         })
         .then((response) => {
-          console.log("response.data.lastPage", response.data);
           let pages = [];
           for (let i = 1; i <= response.data.meta.last_page; i++) {
             pages.push(i);
@@ -274,7 +276,7 @@ const Contacts = () => {
         </ContactMensage>
         <ButtonWrapper onClick={handleOpenAddContactModal}>
           <PlusWrapper src={plus} />
-          Adcionar contato
+          <AddContactMessage>Adicionar contato</AddContactMessage>
         </ButtonWrapper>
         <FilterWrapper>
           <Input
