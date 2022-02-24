@@ -19,7 +19,7 @@ export default class UsersController {
   public async show({  auth }: HttpContextContract) {
     const id = auth.user?.id;
     if(!id) return;
-    const user = await User.query().where('id', id).preload('contacts');
+    const user = await User.query().where('id', id);
 
     return user;
   }

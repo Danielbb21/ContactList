@@ -9,7 +9,7 @@ import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts } from "../Context/UserLogged";
+import { useContacts, usePage } from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
 
@@ -52,6 +52,7 @@ export const ButtonsWrapper = styled.div`
 const AddContactModal = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const { setUserContacts } = useContacts();
+  const {actualPage} = usePage();
   const {
     value: enteredEmail,
     changeValueHandler: changeEmailHandler,
@@ -117,9 +118,10 @@ const AddContactModal = (props) => {
           axios
             .get("http://127.0.0.1:3333/contact", {
               headers: { Authorization: `Bearer ${token}` },
+              params: { page: actualPage },
             })
             .then((response) => {
-              setUserContacts(response.data);
+              setUserContacts(response.data.data);
             })
             .catch((err) => {
               console.log("error", err.message);

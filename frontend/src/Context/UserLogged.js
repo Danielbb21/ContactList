@@ -11,9 +11,10 @@ export default function UserLoggedProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(logged);
   const [userContacts, setUserContacts] = useState([]);
   const [updateData, setUpdateData] = useState();
+  const [actualPage, setActualPage] = useState(1);
 
   return (
-    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn, userContacts, setUserContacts, updateData, setUpdateData }}>
+    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn, userContacts, setUserContacts, updateData, setUpdateData, actualPage, setActualPage }}>
       {children}
     </UserLoggedContext.Provider>
   )
@@ -33,6 +34,13 @@ export function useContacts() {
 
 export function useUpdateData() {
   const context = useContext(UserLoggedContext);
-  const { updateData,  setUpdateData} = context;
+  const { updateData, setUpdateData } = context;
   return { updateData, setUpdateData };
 }
+
+export function usePage() {
+  const context = useContext(UserLoggedContext);
+  const { actualPage, setActualPage } = context;
+  return { actualPage, setActualPage };
+}
+

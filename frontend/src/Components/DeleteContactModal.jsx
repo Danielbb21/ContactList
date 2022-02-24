@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useContacts } from "../Context/UserLogged";
+import { useContacts, usePage } from "../Context/UserLogged";
 
 const style = {
   position: "absolute",
@@ -32,7 +32,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const DeleteContactModal = (props) => {
-  const { setUserContacts } = useContacts();
+  const { userContacts,setUserContacts } = useContacts();
+  const { actualPage, setActualPage } = usePage();
   const handleDeleteContact = () => {
     const token = localStorage.getItem("token");
     axios
@@ -49,12 +50,19 @@ const DeleteContactModal = (props) => {
           progress: undefined,
         });
         props.handleClose();
+        console.log('length', userContacts.length, actualPage);
+        if(userContacts.length === 1 && actualPage !== 1){
+          console.log('awquii');
+          setActualPage(1);
+        }
         axios
           .get("http://127.0.0.1:3333/contact", {
             headers: { Authorization: `Bearer ${token}` },
+            params: { page: actualPage },
           })
           .then((response) => {
-            setUserContacts(response.data);
+            
+            setUserContacts(response.data.data);
           })
           .catch((err) => {
             console.log("error", err.message);

@@ -7,8 +7,8 @@ import ContactComponent from "../Components/ContactComponent";
 import { useEffect } from "react";
 import axios from "axios";
 import { UseLogged } from "../Context/UserLogged";
-import {useContacts} from '../Context/UserLogged';
-
+import { useContacts } from "../Context/UserLogged";
+import { usePage } from "../Context/UserLogged";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -86,12 +86,21 @@ const Contacts = () => {
     font-size: 25px;
   `;
 
+  const PagesButtonWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
+
   const [user, setUser] = useState({ name: "", email: "" });
-  const {userContacts, setUserContacts} = useContacts();
-  
+  const { userContacts, setUserContacts } = useContacts();
+  const [allPages, setAllPages] = useState([]);
+  const { actualPage, setActualPage } = usePage();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
+
     axios
       .get("http://127.0.0.1:3333/user", {
         headers: { Authorization: `Bearer ${token}` },
@@ -102,22 +111,31 @@ const Contacts = () => {
       .catch((err) => {
         console.log("error", err.message);
       });
-      axios.get("http://127.0.0.1:3333/contact", {
+    axios
+      .get("http://127.0.0.1:3333/contact", {
         headers: { Authorization: `Bearer ${token}` },
-      }).then(response => {
-          
-          setUserContacts(response.data);
+        params: { page: actualPage },
       })
-      .catch(err => {
+      .then((response) => {
+        console.log("response.data.lastPage", response.data);
+        let pages = [];
+        for (let i = 1; i <= response.data.meta.last_page; i++) {
+          pages.push(i);
+        }
+        setAllPages(pages);
+        console.log("allpages1", allPages);
+        setUserContacts(response.data.data);
+      })
+      .catch((err) => {
         console.log("error", err.message);
-      })
-  }, [setUserContacts]);
+      });
+  }, [setUserContacts, actualPage]);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
-  
+  console.log("allpages", allPages);
 
   return (
     <>
@@ -149,10 +167,10 @@ const Contacts = () => {
               return (
                 <ContactComponent
                   key={data.id}
-                  id = {data.id}
+                  id={data.id}
                   name={data.name}
                   email={data.email}
-                  phone = {data.phone}
+                  phone={data.phone}
                   image={data.image}
                 />
               );
@@ -163,8 +181,21 @@ const Contacts = () => {
             </NoContactWrapper>
           )}
         </ContactListWrapper>
+        <PagesButtonWrapper>
+          {allPages.map((p, index) => {
+            return (
+              <>
+                <Button key={index} onClick={(event) => setActualPage(+p)}>{p}</Button>
+              </>
+            );
+          })}
+        </PagesButtonWrapper>
       </HomeComponent>
-      <AddContatctModal open={open} handleClose={handleCloseAddContactModal} id={''}/>
+      <AddContatctModal
+        open={open}
+        handleClose={handleCloseAddContactModal}
+        id={""}
+      />
     </>
   );
 };

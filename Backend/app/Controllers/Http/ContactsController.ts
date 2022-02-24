@@ -34,12 +34,15 @@ export default class ContactsController {
   }
 
 
-  public async index({ auth, response }: HttpContextContract) {
+  public async index({ auth, request,response }: HttpContextContract) {
     const id = auth.user?.id;
     if (!id) return;
+    const {page} = request.qs();
+    console.log('request.qs', request.qs());
     const user = await User.find(id);
     if (!user) return response.status(400).json({ error: 'User not found' });
-    const contacts = await Contact.query().where('userId', id);
+    const contacts = await Contact.query().where('userId', id).paginate(page , 10);
+
     return contacts;
   }
   public async show({ request, response }: HttpContextContract) {
