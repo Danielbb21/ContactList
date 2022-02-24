@@ -9,7 +9,7 @@ import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts, usePage } from "../Context/UserLogged";
+import { useContacts, usePage, useAllPages } from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
 
@@ -52,7 +52,9 @@ export const ButtonsWrapper = styled.div`
 const AddContactModal = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const { setUserContacts } = useContacts();
-  const {actualPage} = usePage();
+  const { actualPage } = usePage();
+  const {setAllPages} = useAllPages();
+  
   const {
     value: enteredEmail,
     changeValueHandler: changeEmailHandler,
@@ -76,10 +78,10 @@ const AddContactModal = (props) => {
     hasError: phoneError,
     isValid: phoneIsValid,
     clean: cleanPhone,
-  } = useForm((value) => /\(?([0-9]{2})\)?([ .-]?)([0-9]{5})-([0-9]{4})/.test(value));
+  } = useForm((value) =>
+    /\(?([0-9]{2})\)?([ .-]?)([0-9]{5})-([0-9]{4})/.test(value)
+  );
 
-  
-  
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();
 
@@ -87,14 +89,14 @@ const AddContactModal = (props) => {
     event.preventDefault();
     setIsClicked(true);
     const token = localStorage.getItem("token");
-    
+
     if (formIsValid) {
       let formData = new FormData();
       formData.append("name", enteredName);
       formData.append("email", enteredEmail);
       formData.append("phone", enteredPhone);
       formData.append("image", file);
-      console.log('formData', formData)
+      console.log("formData", formData);
       axios
         .post("http://127.0.0.1:3333/contact", formData, {
           headers: {
@@ -121,6 +123,11 @@ const AddContactModal = (props) => {
               params: { page: actualPage },
             })
             .then((response) => {
+              let pages = [];
+              for (let i = 1; i <= response.data.meta.last_page; i++) {
+                pages.push(i);
+              }
+              setAllPages(pages);
               setUserContacts(response.data.data);
             })
             .catch((err) => {
@@ -141,18 +148,12 @@ const AddContactModal = (props) => {
     }
   };
 
-
-  
   return (
     <>
       <Modal open={props.open}>
         <Box sx={style} style={{ height: "350px" }}>
-          <TitleWrapper>
-          Cadastre um novo contato
-          </TitleWrapper>
-          <FormWrapper
-            onSubmit={ handleAddContactSubmit}
-          >
+          <TitleWrapper>Cadastre um novo contato</TitleWrapper>
+          <FormWrapper onSubmit={handleAddContactSubmit}>
             <InputListWrapper>
               <Input
                 type="text"
@@ -172,13 +173,16 @@ const AddContactModal = (props) => {
               {emailError && isClicked && (
                 <ErrorMessage>Email Invalido</ErrorMessage>
               )}
-              <InputMask mask="(99) 99999-9999" onChange={changePhoneHandler}
-                value={enteredPhone}>
-              <Input
-                type="tel"
-                text="Digite o telefone do seu contato"
-                disableUnderline 
-              />
+              <InputMask
+                mask="(99) 99999-9999"
+                onChange={changePhoneHandler}
+                value={enteredPhone}
+              >
+                <Input
+                  type="tel"
+                  text="Digite o telefone do seu contato"
+                  disableUnderline
+                />
               </InputMask>
               {phoneError && isClicked && (
                 <ErrorMessage>Telefone Invalido</ErrorMessage>

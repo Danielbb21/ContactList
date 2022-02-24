@@ -6,9 +6,9 @@ import AddContatctModal from "../Components/AddContatctModal";
 import ContactComponent from "../Components/ContactComponent";
 import { useEffect } from "react";
 import axios from "axios";
-import { UseLogged } from "../Context/UserLogged";
+import { useAllPages, UseLogged } from "../Context/UserLogged";
 import { useContacts } from "../Context/UserLogged";
-import { usePage } from "../Context/UserLogged";
+import { usePage, allPages } from "../Context/UserLogged";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -95,8 +95,9 @@ const Contacts = () => {
 
   const [user, setUser] = useState({ name: "", email: "" });
   const { userContacts, setUserContacts } = useContacts();
-  const [allPages, setAllPages] = useState([]);
+  
   const { actualPage, setActualPage } = usePage();
+  const {allPages, setAllPages} = useAllPages();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -123,7 +124,7 @@ const Contacts = () => {
           pages.push(i);
         }
         setAllPages(pages);
-        console.log("allpages1", allPages);
+        
         setUserContacts(response.data.data);
       })
       .catch((err) => {
@@ -135,7 +136,7 @@ const Contacts = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
   };
-  console.log("allpages", allPages);
+  
 
   return (
     <>
