@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useAllPages, UseLogged } from "../Context/UserLogged";
 import { useContacts } from "../Context/UserLogged";
-import { usePage, allPages } from "../Context/UserLogged";
+import { usePage } from "../Context/UserLogged";
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -173,7 +173,7 @@ const Contacts = () => {
       .catch((err) => {
         console.log("error", err.message);
       });
-  }, [setUserContacts, actualPage]);
+  }, [setUserContacts, actualPage, setAllPages]);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
