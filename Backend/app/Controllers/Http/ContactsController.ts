@@ -2,6 +2,8 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Contact from 'App/Models/Contact';
 import User from 'App/Models/User';
 import Application from '@ioc:Adonis/Core/Application'
+import fs from 'fs';
+import path from 'path';
 
 
 export default class ContactsController {
@@ -19,10 +21,10 @@ export default class ContactsController {
 
     const file = request.file('image');
 
-    if(file){
+    if (file) {
       const imageName = new Date().getTime().toString() + `.${file.extname}`
       await file.move(Application.publicPath('uploads'), {
-          name: imageName
+        name: imageName
       })
       contact.image = `/uploads/${imageName}`
     }
@@ -32,11 +34,11 @@ export default class ContactsController {
   }
 
 
-  public async index({auth, response }: HttpContextContract) {
+  public async index({ auth, response }: HttpContextContract) {
     const id = auth.user?.id;
-    if(!id) return;
+    if (!id) return;
     const user = await User.find(id);
-    if(!user) return response.status(400).json({error: 'User not found'});
+    if (!user) return response.status(400).json({ error: 'User not found' });
     const contacts = await Contact.query().where('userId', id);
     return contacts;
   }
@@ -55,6 +57,27 @@ export default class ContactsController {
     const data = request.only(['name', 'email', 'phone']);
     const contact = await Contact.find(id);
     if (!contact) return response.status(400).json({ error: 'Contact not found' });
+    const file = request.file('image');
+    if (file) {
+
+      const imagePath = path.join('public/', contact.image);
+
+      const contactImageExists = await fs.promises.stat(imagePath);
+
+      if (contactImageExists) {
+
+        await fs.promises.unlink(imagePath);
+      }
+
+      const imageName = new Date().getTime().toString() + `.${file.extname}`
+      await file.move(Application.publicPath('uploads'), {
+        name: imageName
+      })
+
+      contact.image = `/uploads/${imageName}`
+
+    }
+
     contact.merge(data);
     await contact.save();
     return contact;
