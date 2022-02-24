@@ -166,36 +166,78 @@ const Contacts = () => {
       .catch((err) => {
         console.log("error", err.message);
       });
-    axios
-      .get("http://127.0.0.1:3333/contact", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: {
-          page: actualPage,
-          name: nameFilter,
-          email: emailFilter,
-          phone: phoneFilter,
-        },
-      })
-      .then((response) => {
-        console.log("response.data.lastPage", response.data);
-        let pages = [];
-        for (let i = 1; i <= response.data.meta.last_page; i++) {
-          pages.push(i);
-        }
-        if (
-          response.data.data.length === 0 &&
-          response.data.meta.last_page === 1
-        ) {
-          setAllPages(0);
-        } else {
-          setAllPages(pages);
-        }
+    if (
+      nameFilter.trim() !== "" ||
+      emailFilter.trim() !== "" ||
+      phoneFilter.trim() !== ""
+    ) {
+      const time = setTimeout(() => {
+        axios
+          .get("http://127.0.0.1:3333/contact", {
+            headers: { Authorization: `Bearer ${token}` },
+            params: {
+              page: actualPage,
+              name: nameFilter,
+              email: emailFilter,
+              phone: phoneFilter,
+            },
+          })
+          .then((response) => {
+            console.log("response.data.lastPage", response.data);
+            let pages = [];
+            for (let i = 1; i <= response.data.meta.last_page; i++) {
+              pages.push(i);
+            }
+            if (
+              response.data.data.length === 0 &&
+              response.data.meta.last_page === 1
+            ) {
+              setAllPages(0);
+            } else {
+              setAllPages(pages);
+            }
 
-        setUserContacts(response.data.data);
-      })
-      .catch((err) => {
-        console.log("error", err.message);
-      });
+            setUserContacts(response.data.data);
+          })
+          .catch((err) => {
+            console.log("error", err.message);
+          });
+      }, 500);
+      return () => {
+        clearTimeout(time);
+      };
+    } else {
+      axios
+        .get("http://127.0.0.1:3333/contact", {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            page: actualPage,
+            name: nameFilter,
+            email: emailFilter,
+            phone: phoneFilter,
+          },
+        })
+        .then((response) => {
+          console.log("response.data.lastPage", response.data);
+          let pages = [];
+          for (let i = 1; i <= response.data.meta.last_page; i++) {
+            pages.push(i);
+          }
+          if (
+            response.data.data.length === 0 &&
+            response.data.meta.last_page === 1
+          ) {
+            setAllPages(0);
+          } else {
+            setAllPages(pages);
+          }
+
+          setUserContacts(response.data.data);
+        })
+        .catch((err) => {
+          console.log("error", err.message);
+        });
+    }
   }, [
     setUserContacts,
     actualPage,
@@ -237,7 +279,7 @@ const Contacts = () => {
         <FilterWrapper>
           <Input
             type="text"
-            placeholder="filtre por nome"
+            placeholder="Filtrar por nome"
             value={nameFilter}
             onChange={(event) => {
               setNameFilter(event.target.value);
@@ -246,7 +288,7 @@ const Contacts = () => {
           />
           <Input
             type="text"
-            placeholder="filtre por email"
+            placeholder="Filtrar por e-mail"
             value={emailFilter}
             onChange={(event) => {
               setEmailFilter(event.target.value);
@@ -261,7 +303,7 @@ const Contacts = () => {
               setActualPage(1);
             }}
           >
-            <Input type="text" placeholder="filtre por telefone" />
+            <Input type="text" placeholder="Filtrar por telefone" />
           </InputMask>
         </FilterWrapper>
         <ContactListWrapper>
