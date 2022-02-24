@@ -242,7 +242,7 @@ const AddContactModal = (props) => {
                 <ErrorMessage>Email Invalido</ErrorMessage>
               )}
               <Input
-                type="text"
+                type="tel"
                 text="Digite o telefone do seu contato"
                 onChange={changePhoneHandler}
                 value={enteredPhone}

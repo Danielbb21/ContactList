@@ -34,6 +34,7 @@ const ImageWrapper = styled.div`
 `;
 const Image = styled.img`
   width: 75%;
+  height: 100px;
   border-radius: 10px;
 `;
 
