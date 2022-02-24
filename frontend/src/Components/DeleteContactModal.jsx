@@ -55,7 +55,8 @@ const DeleteContactModal = (props) => {
         console.log("length", userContacts.length, actualPage);
         if (userContacts.length === 1 && actualPage !== 1) {
           console.log("awquii");
-          setActualPage(1);
+          const pageAtual = actualPage -1;
+          setActualPage(pageAtual);
         }
         axios
           .get("http://127.0.0.1:3333/contact", {
@@ -67,7 +68,13 @@ const DeleteContactModal = (props) => {
             for (let i = 1; i <= response.data.meta.last_page; i++) {
               pages.push(i);
             }
-            setAllPages(pages);
+            if(response.data.data.length === 0 && response.data.meta.last_page === 1){
+              setAllPages(0);
+            }
+            else{
+
+              setAllPages(pages);
+            }
             setUserContacts(response.data.data);
           })
           .catch((err) => {

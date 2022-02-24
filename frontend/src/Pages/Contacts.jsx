@@ -123,7 +123,13 @@ const Contacts = () => {
         for (let i = 1; i <= response.data.meta.last_page; i++) {
           pages.push(i);
         }
-        setAllPages(pages);
+        if(response.data.data.length === 0 && response.data.meta.last_page === 1){
+          setAllPages(0);
+        }
+        else{
+
+          setAllPages(pages);
+        }
         
         setUserContacts(response.data.data);
       })
@@ -183,7 +189,7 @@ const Contacts = () => {
           )}
         </ContactListWrapper>
         <PagesButtonWrapper>
-          {allPages.map((p, index) => {
+          {allPages.length > 0 && allPages.map((p, index) => {
             return (
               <>
                 <Button
