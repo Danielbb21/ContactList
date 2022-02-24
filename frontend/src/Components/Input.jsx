@@ -8,7 +8,7 @@ const InputWrapper = styled.input`
     border: none;
     font-size: 17px;
     border-bottom: 2px solid #EBEBEB;
-    width: 300px;
+    width: 350px;
     &:focus {
         box-shadow: 0 0 0 0;
         border: 0 none;

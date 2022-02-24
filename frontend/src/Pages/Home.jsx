@@ -16,13 +16,11 @@ const HomeComponent = styled.div`
   justify-content: space-evenly;
 `;
 
-const ImageComponent = styled.div`
-  background: url("https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png");
-  background-repeat: no-repeat;
+export const ImageComponent = styled.img`
+  
   opacity: 0.7;
-
-  width: 50%;
-  height: 50%;
+  
+ 
 `;
 
 const LoginComponent = styled.div`
@@ -38,17 +36,7 @@ const MessageComponent = styled.h2`
   text-align: center;
 `;
 
-// const InputComponent = styled.input`
-//   padding-bottom: 15px;
-//   padding-top: 25px;
-//   padding-left: 15px;
-//   border: none;
-//   font-size: 17px;
-//   border-bottom: 2px solid #ebebeb;
-//   &: focus {
-//     outline: none;
-//   }
-// `;
+
 
 const FormWrapper = styled.form`
   display: flex;
@@ -165,7 +153,7 @@ const Home = () => {
   return (
     <>
       <HomeComponent>
-        <ImageComponent />
+        <ImageComponent src ={'https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png'}/>
         <LoginComponent>
           <MessageComponent>Realizar Login</MessageComponent>
           <FormWrapper onSubmit={submitLoginHandler}>

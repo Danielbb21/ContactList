@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../Hooks/useForm";
 import { useState } from "react";
 import Input from "../Components/Input";
-import { ErrorMessage } from "./Home";
-import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { ErrorMessage, ImageComponent } from "./Home";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const HomeComponent = styled.div`
   height: 100vh;
@@ -18,13 +18,6 @@ const HomeComponent = styled.div`
   justify-content: space-evenly;
 `;
 
-const ImageComponent = styled.div`
-  background: url("https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png");
-  background-repeat: no-repeat;
-  opacity: 0.7;
-  width: 50%;
-  height: 50%;
-`;
 const LoginComponent = styled.div`
   width: 25%;
   height: 65%;
@@ -77,8 +70,9 @@ const RegisterButton = styled.button`
 const BackMessageWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   cursor: pointer;
+  margin-left: 15px;
 `;
 
 const BackMessage = styled.span`
@@ -124,33 +118,34 @@ const Register = () => {
     event.preventDefault();
     setIsClicked(true);
     if (formIsValid) {
-      axios.post('http://127.0.0.1:3333/user', {
-        name: enteredName,
-        email: enteredEmail,
-        password: enteredPassword
-      }).then(response => {
-        toast.success('Conta criada', {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          
-          progress: undefined,
+      axios
+        .post("http://127.0.0.1:3333/user", {
+          name: enteredName,
+          email: enteredEmail,
+          password: enteredPassword,
+        })
+        .then((response) => {
+          toast.success("Conta criada", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
           });
-        history("/");
-      })
-      .catch(err => {
-        toast.error('Algo deu errado', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          
-          progress: undefined,
+          history("/");
+        })
+        .catch((err) => {
+          toast.error("Algo deu errado", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+
+            progress: undefined,
           });
-        
-      })
-      
+        });
+
       setIsClicked(false);
     }
   };
@@ -160,7 +155,11 @@ const Register = () => {
   };
   return (
     <HomeComponent>
-      <ImageComponent />
+      <ImageComponent
+        src={
+          "https://static.appvn.com/a/uploads/thumbnails/112015/my-contacts_icon.png"
+        }
+      />
       <LoginComponent>
         <MessageComponent>Realize seu cadastro</MessageComponent>
         <FormWrapper onSubmit={submitRegisterHandler}>
