@@ -72,6 +72,9 @@ const ContactComponent = (props) => {
     setOpenUpdateModal(false);
   }
 
+  const url = `http://127.0.0.1:3333${props.image}`
+  console.log('dataImage', url);
+
   return (
     <>
       <ContactWrapper key={props.id}>
@@ -82,7 +85,7 @@ const ContactComponent = (props) => {
           Email: <InfoText>{props.email}</InfoText>
         </InfoWrapper>
         <ImageWrapper>
-          <Image src={props.image} alt={props.name} />
+          <Image src={url} alt={props.name} />
         </ImageWrapper>
         <InfoWrapper>
           Telefone: <InfoText>{props.phone}</InfoText>

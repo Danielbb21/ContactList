@@ -15,6 +15,9 @@ export default class Contact extends BaseModel {
   @column({ columnName: 'phone' })
   public phone: string;
 
+  @column({ columnName: 'image' })
+  public image: string;
+
   @column({columnName: 'user_id'})
   public userId: number
 

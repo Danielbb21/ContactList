@@ -10,6 +10,7 @@ export default class CreateContactsTables extends BaseSchema {
       table.string('name').notNullable()
       table.string('email').notNullable()
       table.string('phone').notNullable()
+      table.string('image')
       table
         .integer('user_id')
         .unsigned()

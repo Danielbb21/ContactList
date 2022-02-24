@@ -1,6 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Contact from 'App/Models/Contact';
 import User from 'App/Models/User';
+import Application from '@ioc:Adonis/Core/Application'
+import Drive from '@ioc:Adonis/Core/Drive'
+
 
 export default class ContactsController {
 
@@ -15,9 +18,17 @@ export default class ContactsController {
     contact.name = data.name;
     contact.phone = data.phone;
 
+    const file = request.file('image');
+    if(file){
+      const imageName = new Date().getTime().toString() + `.${file.extname}`
+      await file.move(Application.publicPath('uploads'), {
+          name: imageName
+      })
+      contact.image = `/uploads/${imageName}`
+    }
     await contact.related('user').associate(user);
-
-    return user;
+    await contact.save();
+    return contact;
   }
 
 
@@ -32,7 +43,10 @@ export default class ContactsController {
   public async show({ request, response }: HttpContextContract) {
     const { id } = request.params();
     const contact = await Contact.find(id);
+
+
     if (!contact) return response.status(400).json({ error: 'Contact not found' });
+
     return contact;
   }
 
