@@ -135,7 +135,7 @@ const Home = () => {
         localStorage.setItem("token",response.data.token);
         setIsLoggedIn(true);
         toast.success('Você está logado', {
-          position: "top-right",
+          position: "top-left",
           autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,

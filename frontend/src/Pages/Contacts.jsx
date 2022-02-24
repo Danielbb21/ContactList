@@ -10,11 +10,18 @@ import { useAllPages, UseLogged } from "../Context/UserLogged";
 import { useContacts } from "../Context/UserLogged";
 import { usePage, allPages } from "../Context/UserLogged";
 
-const HomeComponent = styled.div`
+const PageWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #d3d3d3;
+`;
+
+const HomeComponent = styled.div`
+  /* height: 100vh;
+  width: 100vw;
+  background-color: #d3d3d3; */
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -82,9 +89,10 @@ const PlusWrapper = styled.img`
 `;
 
 const LogoutButtonWrapper = styled.div`
-  position: relative;
-  top: 10;
-  left: 0 !important;
+  width: 95%;
+  display: flex;
+  
+  justify-content: flex-end;
 `;
 
 const Contacts = () => {
@@ -115,6 +123,7 @@ const Contacts = () => {
   const PagesButtonWrapper = styled.div`
     width: 100%;
     display: flex;
+    margin-top: 10px;
     justify-content: center;
     align-items: center;
   `;
@@ -171,21 +180,24 @@ const Contacts = () => {
   };
 
   return (
-    <>
-      <HomeComponent>
-        <LogoutButtonWrapper>
+    <PageWrapper>
+    
+    <LogoutButtonWrapper>
           <Button
             style={{
               background: "#FF201B",
               color: "white",
               fontSize: "15px",
-              marginLeft: "12px",
+              marginTop:'10px'
+
             }}
             onClick={handleLogOut}
           >
             Sair
           </Button>
         </LogoutButtonWrapper>
+      <HomeComponent>
+        
         <ContactMensage>
           Olá {user.name}, seja bem vindo, abaixo estão todos os seus contatos
           cadastrados
@@ -241,7 +253,7 @@ const Contacts = () => {
         handleClose={handleCloseAddContactModal}
         id={""}
       />
-    </>
+    </PageWrapper>
   );
 };
 
