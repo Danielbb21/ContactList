@@ -87,7 +87,14 @@ export default class ContactsController {
     const { id } = request.params();
     const contact = await Contact.find(id);
     if (!contact) return response.status(400).json({ error: 'Contact not found' });
+    const imagePath = path.join('public/', contact.image);
 
+    const contactImageExists = await fs.promises.stat(imagePath);
+
+    if (contactImageExists) {
+
+      await fs.promises.unlink(imagePath);
+    }
     await contact.delete();
     return response.status(200).json('deleted');
   }
