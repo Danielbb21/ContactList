@@ -185,7 +185,18 @@ const Contacts = () => {
           {allPages.map((p, index) => {
             return (
               <>
-                <Button key={index} onClick={(event) => setActualPage(+p)}>{p}</Button>
+                <Button
+                  style={{
+                    background: p === actualPage ? "#103a53" : "",
+                    color: p === actualPage ? "white" : "black",
+                    fontSize: "15px",
+                    marginRight: '15px'
+                  }}
+                  key={index}
+                  onClick={() => setActualPage(+p)}
+                >
+                  {p}
+                </Button>
               </>
             );
           })}
