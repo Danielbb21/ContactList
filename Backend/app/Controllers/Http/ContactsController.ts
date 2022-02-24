@@ -2,7 +2,6 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Contact from 'App/Models/Contact';
 import User from 'App/Models/User';
 import Application from '@ioc:Adonis/Core/Application'
-import Drive from '@ioc:Adonis/Core/Drive'
 
 
 export default class ContactsController {
@@ -19,6 +18,7 @@ export default class ContactsController {
     contact.phone = data.phone;
 
     const file = request.file('image');
+
     if(file){
       const imageName = new Date().getTime().toString() + `.${file.extname}`
       await file.move(Application.publicPath('uploads'), {

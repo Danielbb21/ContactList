@@ -10,6 +10,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useContacts } from "../Context/UserLogged";
+import FormData from 'form-data';
+
 
 const style = {
   position: "absolute",
@@ -98,6 +100,7 @@ const AddContactModal = (props) => {
   }, []);
 
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
+  const [file, setFile] = useState();
 
   const handleAddContactSubmit = (event) => {
     event.preventDefault();
@@ -105,12 +108,17 @@ const AddContactModal = (props) => {
     const token = localStorage.getItem("token");
 
     if (formIsValid) {
+      let formData = new FormData();
+      formData.append('name', enteredName);
+      formData.append('email', enteredEmail);
+      formData.append('phone', enteredPhone);
+      formData.append('image', file)
       axios
         .post(
           "http://127.0.0.1:3333/contact",
-          { name: enteredName, email: enteredEmail, phone: enteredPhone },
+          formData,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { 'content-type': 'multipart/form-data', Authorization: `Bearer ${token}` },
           }
         )
         .then((reponse) => {
@@ -150,6 +158,8 @@ const AddContactModal = (props) => {
       setIsClicked(false);
     }
   };
+
+  
 
   const handleUpdateData = (event) => {
     event.preventDefault();
@@ -202,6 +212,8 @@ const AddContactModal = (props) => {
     }
   };
 
+  
+  
   return (
     <>
       <Modal open={props.open}>
@@ -240,6 +252,7 @@ const AddContactModal = (props) => {
               {phoneError && isClicked && (
                 <ErrorMessage>Telefone Invalido</ErrorMessage>
               )}
+              <Input type="file" onChange={(event) => setFile(event.target.files[0])}/>
             </InputListWrapper>
             <ButtonsWrapper>
               <Button
