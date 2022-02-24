@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useContacts } from "../Context/UserLogged";
 import FormData from "form-data";
+import InputMask from "react-input-mask";
 
 const style = {
   position: "absolute",
@@ -74,13 +75,13 @@ const AddContactModal = (props) => {
     hasError: phoneError,
     isValid: phoneIsValid,
     clean: cleanPhone,
-  } = useForm((value) => value.trim().length !== 0);
+  } = useForm((value) => /\(?([0-9]{2})\)?([ .-]?)([0-9]{5})-([0-9]{4})/.test(value));
 
-  
+  const [dataPushed, setDataPushed] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (props.id) {
+    if (props.id && !dataPushed) {
       
       axios
         .get(`http://127.0.0.1:3333/contact/${props.id}`, {
@@ -91,12 +92,13 @@ const AddContactModal = (props) => {
           changeEmailHandler(response.data.email);
           changeNameHandler(response.data.name);
           changePhoneHandler(response.data.phone);
+          setDataPushed(true);
         })
         .catch((err) => {
           console.log("error", err.message);
         });
     }
-  }, [props.id,changeEmailHandler, changeNameHandler, changePhoneHandler]);
+  }, [props.id,changeEmailHandler, changeNameHandler, changePhoneHandler, dataPushed]);
 
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();
@@ -213,6 +215,7 @@ const AddContactModal = (props) => {
     }
   };
 
+  
   return (
     <>
       <Modal open={props.open}>
@@ -242,12 +245,14 @@ const AddContactModal = (props) => {
               {emailError && isClicked && (
                 <ErrorMessage>Email Invalido</ErrorMessage>
               )}
+              <InputMask mask="(99) 99999-9999" onChange={changePhoneHandler}
+                value={enteredPhone}>
               <Input
                 type="tel"
                 text="Digite o telefone do seu contato"
-                onChange={changePhoneHandler}
-                value={enteredPhone}
+                disableUnderline 
               />
+              </InputMask>
               {phoneError && isClicked && (
                 <ErrorMessage>Telefone Invalido</ErrorMessage>
               )}
