@@ -59,14 +59,15 @@ export default class ContactsController {
     if (!contact) return response.status(400).json({ error: 'Contact not found' });
     const file = request.file('image');
     if (file) {
+      if (contact.image !== null) {
+        const imagePath = path.join('public/', contact.image);
 
-      const imagePath = path.join('public/', contact.image);
+        const contactImageExists = await fs.promises.stat(imagePath);
 
-      const contactImageExists = await fs.promises.stat(imagePath);
+        if (contactImageExists) {
 
-      if (contactImageExists) {
-
-        await fs.promises.unlink(imagePath);
+          await fs.promises.unlink(imagePath);
+        }
       }
 
       const imageName = new Date().getTime().toString() + `.${file.extname}`
@@ -87,14 +88,17 @@ export default class ContactsController {
     const { id } = request.params();
     const contact = await Contact.find(id);
     if (!contact) return response.status(400).json({ error: 'Contact not found' });
-    const imagePath = path.join('public/', contact.image);
+    if (contact.image !== null) {
+      const imagePath = path.join('public/', contact.image);
 
-    const contactImageExists = await fs.promises.stat(imagePath);
+      const contactImageExists = await fs.promises.stat(imagePath);
 
-    if (contactImageExists) {
+      if (contactImageExists) {
 
-      await fs.promises.unlink(imagePath);
+        await fs.promises.unlink(imagePath);
+      }
     }
+
     await contact.delete();
     return response.status(200).json('deleted');
   }

@@ -73,7 +73,7 @@ const ContactComponent = (props) => {
     setOpenUpdateModal(false);
   }
 
-  const url = `http://127.0.0.1:3333${props.image}`
+  const url = props.image ? `http://127.0.0.1:3333${props.image}` : 'https://i.stack.imgur.com/l60Hf.png';
   console.log('dataImage', url);
 
   return (

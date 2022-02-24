@@ -76,12 +76,12 @@ const AddContactModal = (props) => {
     clean: cleanPhone,
   } = useForm((value) => value.trim().length !== 0);
 
-  console.log("fi", props.id);
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (props.id) {
-      console.log("propsffrf", props.id);
+      
       axios
         .get(`http://127.0.0.1:3333/contact/${props.id}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -96,7 +96,7 @@ const AddContactModal = (props) => {
           console.log("error", err.message);
         });
     }
-  }, []);
+  }, [props.id]);
 
   const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();
@@ -105,13 +105,14 @@ const AddContactModal = (props) => {
     event.preventDefault();
     setIsClicked(true);
     const token = localStorage.getItem("token");
-
+    
     if (formIsValid) {
       let formData = new FormData();
       formData.append("name", enteredName);
       formData.append("email", enteredEmail);
       formData.append("phone", enteredPhone);
       formData.append("image", file);
+      console.log('formData', formData)
       axios
         .post("http://127.0.0.1:3333/contact", formData, {
           headers: {
