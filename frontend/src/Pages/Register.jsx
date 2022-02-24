@@ -4,19 +4,10 @@ import { useNavigate } from "react-router-dom";
 import useForm from "../Hooks/useForm";
 import { useState } from "react";
 import Input from "../Components/Input";
-import { AllPageComponent, ErrorMessage, HomeComponent, ImageComponent, WelcomeInfo, WelcomeMessage } from "./Home";
+import { AllPageComponent, ErrorMessage, HomeComponent, ImageComponent, WelcomeInfo, WelcomeMessage, WelcomeMessagewrapper } from "./Home";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-
-// const HomeComponent = styled.div`
-//   height: 100vh;
-//   width: 100vw;
-//   background-color: #d3d3d3;
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-evenly;
-// `;
 
 const LoginComponent = styled.div`
   width: 25%;
@@ -31,17 +22,6 @@ const MessageComponent = styled.h2`
   text-align: center;
 `;
 
-// const InputComponent = styled.input`
-//   padding-bottom: 15px;
-//   padding-top: 25px;
-//   padding-left: 15px;
-//   border: none;
-//   font-size: 17px;
-//   border-bottom: 2px solid #ebebeb;
-//   &: focus {
-//     outline: none;
-//   }
-// `;
 
 const FormWrapper = styled.form`
   display: flex;
@@ -155,10 +135,10 @@ const Register = () => {
   };
   return (
     <AllPageComponent>
-      <WelcomeMessage>
+      <WelcomeMessagewrapper>
         <WelcomeMessage>Minha lista de contatos</WelcomeMessage>
         <WelcomeInfo>Salve seus contatos de forma fácil e rapida</WelcomeInfo>
-      </WelcomeMessage>
+      </WelcomeMessagewrapper>
       <HomeComponent>
         <ImageComponent
           src={

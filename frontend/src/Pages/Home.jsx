@@ -88,11 +88,12 @@ export const AllPageComponent = styled.div`
   background-color: #d3d3d3;
 `;
 export const WelcomeMessagewrapper = styled.div`
-  margin-top: 10px;
+  
   height: 25vh;
   width: 100%;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 `;
 
@@ -171,10 +172,10 @@ const Home = () => {
 
   return (
     <AllPageComponent>
-      <WelcomeMessage>
+      <WelcomeMessagewrapper>
         <WelcomeMessage>Minha lista de contatos</WelcomeMessage>
         <WelcomeInfo>Salve seus contatos de forma fácil e rapida</WelcomeInfo>
-      </WelcomeMessage>
+      </WelcomeMessagewrapper>
       <HomeComponent>
         <ImageComponent
           src={

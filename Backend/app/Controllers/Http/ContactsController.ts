@@ -38,7 +38,7 @@ export default class ContactsController {
     const id = auth.user?.id;
     if (!id) return;
     const {page} = request.qs();
-    console.log('request.qs', request.qs());
+
     const user = await User.find(id);
     if (!user) return response.status(400).json({ error: 'User not found' });
     const contacts = await Contact.query().where('userId', id).paginate(page , 9);

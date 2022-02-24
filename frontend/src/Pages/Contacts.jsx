@@ -22,7 +22,7 @@ const HomeComponent = styled.div`
   background-color: #d3d3d3; */
   display: flex;
   /* flex: 1; */
-  height:90vh;
+  height: 90vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@ const ContactMensage = styled.h1`
 `;
 
 const ContactListWrapper = styled.div`
-  width: 900px;
+  width: 800px;
   height: 450px;
   background-color: white;
   border-radius: 25px;
@@ -92,10 +92,31 @@ const PlusWrapper = styled.img`
 const LogoutButtonWrapper = styled.div`
   width: 95%;
   display: flex;
-  
+
   justify-content: flex-end;
 `;
 
+const NoContactWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoContactMessage = styled.h3`
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+`;
+
+const PagesButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+`;
 const Contacts = () => {
   const [open, setOpen] = useState(false);
   const { setIsLoggedIn } = UseLogged();
@@ -106,28 +127,6 @@ const Contacts = () => {
   const handleCloseAddContactModal = () => {
     setOpen(false);
   };
-
-  const NoContactWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
-
-  const NoContactMessage = styled.h3`
-    text-align: center;
-    font-weight: bold;
-    font-size: 25px;
-  `;
-
-  const PagesButtonWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    margin-top: 10px;
-    justify-content: center;
-    align-items: center;
-  `;
 
   const [user, setUser] = useState({ name: "", email: "" });
   const { userContacts, setUserContacts } = useContacts();
@@ -182,23 +181,20 @@ const Contacts = () => {
 
   return (
     <PageWrapper>
-    
-    <LogoutButtonWrapper>
-          <Button
-            style={{
-              background: "#FF201B",
-              color: "white",
-              fontSize: "15px",
-              marginTop:'10px'
-
-            }}
-            onClick={handleLogOut}
-          >
-            Sair
-          </Button>
-        </LogoutButtonWrapper>
+      <LogoutButtonWrapper>
+        <Button
+          style={{
+            background: "#FF201B",
+            color: "white",
+            fontSize: "15px",
+            marginTop: "10px",
+          }}
+          onClick={handleLogOut}
+        >
+          Sair
+        </Button>
+      </LogoutButtonWrapper>
       <HomeComponent>
-        
         <ContactMensage>
           Olá {user.name}, seja bem vindo, abaixo estão todos os seus contatos
           cadastrados
