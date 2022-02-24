@@ -9,7 +9,14 @@ import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts, usePage, useAllPages } from "../Context/UserLogged";
+import {
+  useContacts,
+  usePage,
+  useAllPages,
+  useNameFilter,
+  usePhoneFilter,
+  useEmailFilter,
+} from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
 
@@ -53,7 +60,10 @@ const AddContactModal = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const { setUserContacts } = useContacts();
   const { actualPage } = usePage();
-  const {setAllPages} = useAllPages();
+  const { setAllPages } = useAllPages();
+  const { nameFilter } = useNameFilter();
+  const { emailFilter } = useEmailFilter();
+  const { phoneFilter } = usePhoneFilter();
 
   const {
     value: enteredEmail,
@@ -120,7 +130,12 @@ const AddContactModal = (props) => {
           axios
             .get("http://127.0.0.1:3333/contact", {
               headers: { Authorization: `Bearer ${token}` },
-              params: { page: actualPage },
+              params: {
+                page: actualPage,
+                name: nameFilter,
+                email: emailFilter,
+                phone: phoneFilter,
+              },
             })
             .then((response) => {
               let pages = [];
@@ -189,8 +204,8 @@ const AddContactModal = (props) => {
               )}
               <input
                 type="file"
-                style={{marginTop: '10px', fontSize: '14px'}}
-                accept="image/x-png,image/gif,image/jpeg" 
+                style={{ marginTop: "10px", fontSize: "14px" }}
+                accept="image/x-png,image/gif,image/jpeg"
                 onChange={(event) => setFile(event.target.files[0])}
               />
             </InputListWrapper>

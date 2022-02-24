@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useAllPages, useContacts, usePage } from "../Context/UserLogged";
+import { useAllPages, useContacts, useEmailFilter, useNameFilter, usePage, usePhoneFilter } from "../Context/UserLogged";
 
 const style = {
   position: "absolute",
@@ -35,6 +35,9 @@ const DeleteContactModal = (props) => {
   const { userContacts, setUserContacts } = useContacts();
   const { actualPage, setActualPage } = usePage();
   const { setAllPages } = useAllPages();
+  const { nameFilter } = useNameFilter();
+  const { emailFilter } = useEmailFilter();
+  const { phoneFilter } = usePhoneFilter()
 
   const handleDeleteContact = () => {
     const token = localStorage.getItem("token");
@@ -61,7 +64,7 @@ const DeleteContactModal = (props) => {
         axios
           .get("http://127.0.0.1:3333/contact", {
             headers: { Authorization: `Bearer ${token}` },
-            params: { page: actualPage },
+            params: { page: actualPage, name: nameFilter, email: emailFilter, phone: phoneFilter },
           })
           .then((response) => {
             let pages = [];

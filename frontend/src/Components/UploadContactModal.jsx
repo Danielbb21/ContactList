@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts, useUpdateData, usePage } from "../Context/UserLogged";
+import { useContacts, useUpdateData, usePage, useNameFilter, useEmailFilter, usePhoneFilter } from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
 import {
@@ -36,6 +36,9 @@ const UploadContactModal = (props) => {
   const { actualPage } = usePage();
   const [file, setFile] = useState();
   const { setUserContacts } = useContacts();
+  const { nameFilter } = useNameFilter();
+  const { emailFilter } = useEmailFilter();
+  const { phoneFilter } = usePhoneFilter()
 
   const handleUpdateData = (event) => {
     event.preventDefault();
@@ -68,7 +71,7 @@ const UploadContactModal = (props) => {
         axios
           .get("http://127.0.0.1:3333/contact", {
             headers: { Authorization: `Bearer ${token}` },
-            params: { page: actualPage },
+            params: { page: actualPage, name: nameFilter, email: emailFilter, phone: phoneFilter },
           })
           .then((response) => {
             setUserContacts(response.data.data);

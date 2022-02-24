@@ -13,8 +13,12 @@ export default function UserLoggedProvider({ children }) {
   const [updateData, setUpdateData] = useState();
   const [actualPage, setActualPage] = useState(1);
   const [allPages, setAllPages] = useState([]);
+  const [nameFilter, setNameFilter] = useState('');
+  const [emailFilter, setEmailFilter] = useState('');
+  const [phoneFilter, setPhoneFilter] = useState('');
+
   return (
-    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn, userContacts, setUserContacts, updateData, setUpdateData, actualPage, setActualPage, allPages, setAllPages }}>
+    <UserLoggedContext.Provider value={{ isLoggedIn, setIsLoggedIn, userContacts, setUserContacts, updateData, setUpdateData, actualPage, setActualPage, allPages, setAllPages, phoneFilter, setPhoneFilter, nameFilter, setNameFilter, emailFilter, setEmailFilter }}>
       {children}
     </UserLoggedContext.Provider>
   )
@@ -48,4 +52,22 @@ export function useAllPages() {
   const context = useContext(UserLoggedContext);
   const { allPages, setAllPages } = context;
   return { allPages, setAllPages };
+}
+
+export function useNameFilter() {
+  const context = useContext(UserLoggedContext);
+  const { nameFilter, setNameFilter } = context;
+  return { nameFilter, setNameFilter };
+}
+
+export function useEmailFilter() {
+  const context = useContext(UserLoggedContext);
+  const { emailFilter, setEmailFilter } = context;
+  return { emailFilter, setEmailFilter };
+}
+
+export function usePhoneFilter() {
+  const context = useContext(UserLoggedContext);
+  const { phoneFilter, setPhoneFilter } = context;
+  return { phoneFilter, setPhoneFilter };
 }

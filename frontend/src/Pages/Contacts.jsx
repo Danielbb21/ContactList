@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import plus from "../Images/plus.svg";
-import { Button } from "@mui/material";
+import { Button, Input } from "@mui/material";
 import { useState } from "react";
 import AddContatctModal from "../Components/AddContatctModal";
 import ContactComponent from "../Components/ContactComponent";
@@ -8,7 +8,13 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useAllPages, UseLogged } from "../Context/UserLogged";
 import { useContacts } from "../Context/UserLogged";
-import { usePage } from "../Context/UserLogged";
+import {
+  usePage,
+  useEmailFilter,
+  usePhoneFilter,
+  useNameFilter,
+} from "../Context/UserLogged";
+import InputMask from "react-input-mask/lib/react-input-mask.development";
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -117,9 +123,22 @@ const PagesButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const FilterWrapper = styled.div`
+  width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+`;
+
 const Contacts = () => {
   const [open, setOpen] = useState(false);
   const { setIsLoggedIn } = UseLogged();
+  const { nameFilter, setNameFilter } = useNameFilter();
+  const { emailFilter, setEmailFilter } = useEmailFilter();
+  const { phoneFilter, setPhoneFilter } = usePhoneFilter();
+
   const handleOpenAddContactModal = () => {
     setOpen(true);
   };
@@ -150,7 +169,12 @@ const Contacts = () => {
     axios
       .get("http://127.0.0.1:3333/contact", {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page: actualPage },
+        params: {
+          page: actualPage,
+          name: nameFilter,
+          email: emailFilter,
+          phone: phoneFilter,
+        },
       })
       .then((response) => {
         console.log("response.data.lastPage", response.data);
@@ -172,7 +196,14 @@ const Contacts = () => {
       .catch((err) => {
         console.log("error", err.message);
       });
-  }, [setUserContacts, actualPage, setAllPages]);
+  }, [
+    setUserContacts,
+    actualPage,
+    setAllPages,
+    nameFilter,
+    emailFilter,
+    phoneFilter,
+  ]);
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
@@ -203,6 +234,36 @@ const Contacts = () => {
           <PlusWrapper src={plus} />
           Adcionar contato
         </ButtonWrapper>
+        <FilterWrapper>
+          <Input
+            type="text"
+            placeholder="filtre por nome"
+            value={nameFilter}
+            onChange={(event) => {
+              setNameFilter(event.target.value);
+              setActualPage(1);
+            }}
+          />
+          <Input
+            type="text"
+            placeholder="filtre por email"
+            value={emailFilter}
+            onChange={(event) => {
+              setEmailFilter(event.target.value);
+              setActualPage(1);
+            }}
+          />
+          <InputMask
+            mask="(99) 99999-9999"
+            value={phoneFilter}
+            onChange={(event) => {
+              setPhoneFilter(event.target.value);
+              setActualPage(1);
+            }}
+          >
+            <Input type="text" placeholder="filtre por telefone" />
+          </InputMask>
+        </FilterWrapper>
         <ContactListWrapper>
           {userContacts.length !== 0 ? (
             userContacts.map((data) => {
