@@ -5,6 +5,8 @@ import pencil from "../Images/pencil.svg";
 import { useState } from "react";
 import DeleteContactModal from "./DeleteContactModal";
 import AddContatctModal from './AddContatctModal';
+import UploadContactModal from "./UploadContactModal";
+import {useUpdateData} from '../Context/UserLogged';
 
 const ContactWrapper = styled.div`
   width: 200px;
@@ -52,9 +54,9 @@ const ContactComponent = (props) => {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // const [contactId = setContactId] = useState('');
-  const [data, setDate] = useState('');
+  
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
-
+  const {setUpdateData} = useUpdateData();
   const onOpenDeleteModal = () => {
     
     setOpenDeleteModal(true);
@@ -65,8 +67,10 @@ const ContactComponent = (props) => {
   }
 
   const onOpenUpdateModal = () => {
-    setDate(props.id);
+    
+    setUpdateData({name: props.name, email: props.email, phone: props.phone})
     setOpenUpdateModal(true);
+    
   }
 
   const onCloseUpdateModal = () => {
@@ -120,7 +124,7 @@ const ContactComponent = (props) => {
         </ButtonsWrapper>
       </ContactWrapper>
       <DeleteContactModal open = {openDeleteModal} handleClose = {onCloseDeleteModal} id= {props.id}/>
-      <AddContatctModal open={openUpdateModal} handleClose={onCloseUpdateModal} id = {props.id} name={props.name} email={props.email} phone = {props.phone}/>
+      <UploadContactModal open={openUpdateModal} handleClose={onCloseUpdateModal} id = {props.id}/>
     </>
   );
 };

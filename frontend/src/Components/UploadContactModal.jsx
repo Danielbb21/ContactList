@@ -3,15 +3,22 @@ import { Button } from "@mui/material";
 import Input from "./Input";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+
 import useForm from "../Hooks/useForm";
 import { ErrorMessage } from "../Pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContacts } from "../Context/UserLogged";
+import { useContacts, useUpdateData } from "../Context/UserLogged";
 import FormData from "form-data";
 import InputMask from "react-input-mask";
+import {
+  ButtonsWrapper,
+  FormWrapper,
+  InputListWrapper,
+  TitleWrapper,
+} from "./AddContatctModal";
+import { useEffect, useState } from "react";
 
 const style = {
   position: "absolute",
@@ -26,83 +33,33 @@ const style = {
   // background: "#A483BB",
 };
 
-export const TitleWrapper = styled.h1`
-  margin: 0;
-  text-align: center;
-`;
-export const InputListWrapper = styled.div`
-  display: flex;
+const UploadContactModal = (props) => {
+  const {updateData, setUpdateData} = useUpdateData();
+  // const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-`;
-
-export const FormWrapper = styled.form`
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: column;
-`;
-export const ButtonsWrapper = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-evenly;
-`;
-
-const AddContactModal = (props) => {
-  const [isClicked, setIsClicked] = useState(false);
-  const { setUserContacts } = useContacts();
-  const {
-    value: enteredEmail,
-    changeValueHandler: changeEmailHandler,
-    hasError: emailError,
-    isValid: emailIsValid,
-    clean: cleanEmail,
-  } = useForm((value) =>
-    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)
-  );
-  const {
-    value: enteredName,
-    changeValueHandler: changeNameHandler,
-    hasError: nameError,
-    isValid: nameIsValid,
-    clean: cleanName,
-  } = useForm((value) => value.trim().length !== 0);
-
-  const {
-    value: enteredPhone,
-    changeValueHandler: changePhoneHandler,
-    hasError: phoneError,
-    isValid: phoneIsValid,
-    clean: cleanPhone,
-  } = useForm((value) => /\(?([0-9]{2})\)?([ .-]?)([0-9]{5})-([0-9]{4})/.test(value));
-
-  const [dataPushed, setDataPushed] = useState(false);
-  
-  const formIsValid = emailIsValid && nameIsValid && phoneIsValid;
   const [file, setFile] = useState();
-
-  const handleAddContactSubmit = (event) => {
+  const { setUserContacts } = useContacts();
+  
+  
+  const handleUpdateData = (event) => {
     event.preventDefault();
-    setIsClicked(true);
     const token = localStorage.getItem("token");
-    
-    if (formIsValid) {
+
+    // if (formIsValid) {
       let formData = new FormData();
-      formData.append("name", enteredName);
-      formData.append("email", enteredEmail);
-      formData.append("phone", enteredPhone);
+      formData.append("name",updateData.name);
+      formData.append("email", updateData.email);
+      formData.append("phone", updateData.phone);
       formData.append("image", file);
-      console.log('formData', formData)
       axios
-        .post("http://127.0.0.1:3333/contact", formData, {
+        .put(`http://127.0.0.1:3333/contact/${props.id}`, formData, {
           headers: {
             "content-type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         })
         .then((reponse) => {
-          toast.success("Contato criado", {
+          toast.success("Contato Atualizado", {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -110,9 +67,8 @@ const AddContactModal = (props) => {
 
             progress: undefined,
           });
-          cleanName();
-          cleanPhone();
-          cleanEmail();
+          
+          
           props.handleClose();
           axios
             .get("http://127.0.0.1:3333/contact", {
@@ -135,52 +91,61 @@ const AddContactModal = (props) => {
             progress: undefined,
           });
         });
-      setIsClicked(false);
-    }
+      // setIsClicked(false);
+    // }
   };
-
-
   
+
   return (
     <>
       <Modal open={props.open}>
         <Box sx={style} style={{ height: "350px" }}>
-          <TitleWrapper>
-          Cadastre um novo contato
-          </TitleWrapper>
+          <TitleWrapper>Atualize o contato</TitleWrapper>
           <FormWrapper
-            onSubmit={ handleAddContactSubmit}
+          onSubmit={handleUpdateData }
           >
             <InputListWrapper>
               <Input
                 type="text"
                 text="Digite o nome do seu contato"
-                onChange={changeNameHandler}
-                value={enteredName}
+                onChange={(event) => setUpdateData((previus) => {
+                  let obj = {...previus, name: event.target.value};
+                  return obj;
+                })}
+                value={updateData  && updateData.name}
               />
-              {nameError && isClicked && (
-                <ErrorMessage>Nome Invalido</ErrorMessage>
-              )}
+              {/* {nameError && isClicked && (
+          <ErrorMessage>Nome Invalido</ErrorMessage>
+        )} */}
               <Input
                 type="email"
                 text="Digite o e-mail do seu contato"
-                onChange={changeEmailHandler}
-                value={enteredEmail}
+                onChange={(event) => setUpdateData((previus) => {
+                  let obj = {...previus, email: event.target.value};
+                  return obj;
+                })}
+                value={updateData  && updateData.email}
               />
-              {emailError && isClicked && (
-                <ErrorMessage>Email Invalido</ErrorMessage>
-              )}
-              <InputMask mask="(99) 99999-9999" onChange={changePhoneHandler}
-                value={enteredPhone}>
-              <Input
-                type="tel"
-                text="Digite o telefone do seu contato"
-                disableUnderline 
-              />
+              {/* {emailError && isClicked && (
+          <ErrorMessage>Email Invalido</ErrorMessage>
+        )} */}
+              <InputMask
+                mask="(99) 99999-9999"
+                onChange={(event) => setUpdateData((previus) => {
+                  let obj = {...previus, phone: event.target.value};
+                  return obj;
+                })}
+                value={updateData  && updateData.phone}
+              >
+                <Input
+                  type="tel"
+                  text="Digite o telefone do seu contato"
+                  disableUnderline
+                />
               </InputMask>
-              {phoneError && isClicked && (
-                <ErrorMessage>Telefone Invalido</ErrorMessage>
-              )}
+              {/* {phoneError && isClicked && (
+              <ErrorMessage>Telefone Invalido</ErrorMessage>
+            )} */}
               <Input
                 type="file"
                 onChange={(event) => setFile(event.target.files[0])}
@@ -206,9 +171,7 @@ const AddContactModal = (props) => {
                   fontSize: "15px",
                   marginLeft: "12px",
                 }}
-              >
-                Cadastrar
-              </Button>
+              >Atualizar</Button>
             </ButtonsWrapper>
           </FormWrapper>
         </Box>
@@ -216,5 +179,4 @@ const AddContactModal = (props) => {
     </>
   );
 };
-
-export default AddContactModal;
+export default UploadContactModal;
